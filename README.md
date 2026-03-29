@@ -148,7 +148,9 @@ Received --> Processing --> For Approval --> Approved --> Released
 
 ## Group Members
 
-> Group 6 — CIT Department
+> Nash Gutierrez
+> Laurendeyn Aquino
+> Nhico Ignacio
 
 ---
 
