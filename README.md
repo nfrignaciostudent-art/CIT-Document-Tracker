@@ -33,16 +33,16 @@ A document tracking system for CIT that uses the **IDEA (International Data Encr
 ## Project Structure
 
 ```
-IDEA-CIT/
-├── index.html                      # Main web app (tracking + admin)
-├── style.css                       # All styles (separated from HTML)
-├── app.js                          # Frontend JavaScript logic
-├── IDEA_CIT_Document_Tracker.java  # Java CLI app
-├── lib/                            # Place downloaded JARs here (see below)
-│   ├── core-3.5.2.jar
-│   └── javase-3.5.2.jar
+IDEA CIT/
 ├── .gitignore
-└── README.md
+├── lib/
+│   ├── core-3.5.2.jar        ← local only, never pushed
+│   └── javase-3.5.2.jar      ← local only, never pushed
+├── app.js
+├── IDEA_CIT_Document_Tracker.java
+├── index.html
+├── README.md
+└── style.css
 ```
 
 ---
