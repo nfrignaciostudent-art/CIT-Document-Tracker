@@ -662,7 +662,7 @@
 <div id="toast"></div>
 
 <script>
-/*  IDEA ENCRYPTION  */
+/* ══ IDEA ENCRYPTION ═══════════════════════════════════════ */
 const IDEA = (() => {
   function mu(a,b){a&=0xFFFF;b&=0xFFFF;if(!a)a=65536;if(!b)b=65536;const r=Number(BigInt(a)*BigInt(b)%65537n);return r===65536?0:r;}
   function mi(a){if(!a)return 0;if(a===1)return 1;let t=0n,nt=1n,r=65537n,nr=BigInt(a);while(nr){const q=r/nr;[t,nt]=[nt,t-q*nt];[r,nr]=[nr,r%nr];}return Number(t<0n?t+65537n:t);}
@@ -720,10 +720,10 @@ const IDEA = (() => {
   return{encrypt,decrypt};
 })();
 
-/*  CONSTANTS  */
+/* ══ CONSTANTS ═════════════════════════════════════════════ */
 const KEY = "Group6CITKey2024";
 
-/*  STATE  */
+/* ══ STATE ══════════════════════════════════════════════════ */
 let accounts      = [];
 let docs          = [];
 let notifications = {};
@@ -733,7 +733,7 @@ let currentUser   = null;
 let updateDocId   = null;
 let _uvCurrentUid = null;
 
-/*  HELPERS  */
+/* ══ HELPERS ════════════════════════════════════════════════ */
 const genId  = () => 'DOC-' + Date.now().toString(36).toUpperCase().slice(-5);
 const genUID = () => 'USR-' + Date.now().toString(36).toUpperCase();
 const nowStr = () => new Date().toLocaleString('en-PH');
@@ -748,7 +748,7 @@ function statusColor(s){
   return m[s]||'#94a3b8';
 }
 
-/*  STORAGE  */
+/* ══ STORAGE ══════════════════════════════════════════════ */
 function save(){
   const docsLite = docs.map(d => {
     const copy = Object.assign({}, d);
@@ -790,7 +790,7 @@ function logActivity(userId, message, color){
   save();
 }
 
-/*  AUTH  */
+/* ══ AUTH ═══════════════════════════════════════════════════ */
 function switchAuthTab(tab){
   document.querySelectorAll('.auth-tab').forEach((t,i)=>t.classList.toggle('active',(tab==='login'?i===0:i===1)));
   document.getElementById('login-form').style.display     = tab==='login'?'':'none';
@@ -860,7 +860,7 @@ function enterApp(){
   renderNotifCount();
 }
 
-/*  SIDEBAR  */
+/* ══ SIDEBAR ════════════════════════════════════════════════ */
 function setupSidebar(){
   const isAdmin=currentUser.role==='admin';
   document.getElementById('user-info-bar').innerHTML=`
@@ -876,7 +876,7 @@ function setupSidebar(){
   if(adminCard) adminCard.style.display=isAdmin?'':'none';
 }
 
-/*  NAVIGATION  */
+/* ══ NAVIGATION ═════════════════════════════════════════════ */
 function showPage(id,btn){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
@@ -888,10 +888,10 @@ function showPage(id,btn){
   if(id==='movements') renderMovementLogs();
 }
 
-/*  RENDER ALL  */
+/* ══ RENDER ALL ═════════════════════════════════════════════ */
 function renderAll(){ renderStats(); renderDash(); renderVault(); renderNotifCount(); }
 
-/*  STATS  */
+/* ══ STATS ══════════════════════════════════════════════════ */
 function renderStats(){
   const isAdmin=currentUser.role==='admin';
   const myDocs=isAdmin?docs:docs.filter(d=>d.ownerId===currentUser.id);
@@ -907,7 +907,7 @@ function renderStats(){
   document.getElementById('dash-subtitle').textContent = isAdmin?'Overview of all documents':`Welcome back, ${currentUser.name||currentUser.username}`;
 }
 
-/*  DASHBOARD  */
+/* ══ DASHBOARD ══════════════════════════════════════════════ */
 function renderDash(){
   const isAdmin=currentUser.role==='admin';
   const myDocs=isAdmin?docs:docs.filter(d=>d.ownerId===currentUser.id);
@@ -951,7 +951,7 @@ function dashActions(d){
   const isOwner=d.ownerId===currentUser.id;
   let btns='';
   if(d.fileData){
-    btns+=`<button class="btn btn-sm" style="background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0" onclick="openFileModal('${d.id}')" title="View / Download attached file"> File</button>`;
+    btns+=`<button class="btn btn-sm" style="background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0" onclick="openFileModal('${d.id}')" title="View / Download attached file">📎 File</button>`;
   }
   if(isAdmin){
     btns+=`<button class="btn btn-sm btn-blue" onclick="openUpdate('${d.id}')">Update</button>`;
@@ -966,7 +966,7 @@ function dashActions(d){
   return `<div style="display:flex;gap:5px;flex-wrap:wrap">${btns}</div>`;
 }
 
-/*  VAULT  */
+/* ══ VAULT ══════════════════════════════════════════════════ */
 function renderVault(){
   const isAdmin=currentUser.role==='admin';
   const term=(document.getElementById('search-input')?.value||'').toLowerCase();
@@ -988,11 +988,11 @@ function renderVault(){
   tb.innerHTML=rows.map(d=>{
     const lastLoc = getLatestLocation(d);
     const locHtml = lastLoc.location
-      ? `<span class="loc-badge"> ${lastLoc.location}</span>`
+      ? `<span class="loc-badge">📍 ${lastLoc.location}</span>`
       : `<span style="font-size:11px;color:#94a3b8">—</span>`;
     return `<tr>
       <td class="doc-id-cell">${d.id}</td>
-      <td class="doc-name-cell">${d.name}${isAdmin?`<br><span style="font-size:11px;color:var(--muted);font-weight:400"> ${d.ownerName}</span>`:''}</td>
+      <td class="doc-name-cell">${d.name}${isAdmin?`<br><span style="font-size:11px;color:var(--muted);font-weight:400">👤 ${d.ownerName}</span>`:''}</td>
       <td style="font-size:13px">${d.by}</td>
       <td class="enc-cell" title="${d.enc}">${d.enc.slice(0,14)}…</td>
       <td class="dec-cell">${IDEA.decrypt(d.enc,KEY)}</td>
@@ -1013,7 +1013,7 @@ function getLatestLocation(d){
   return {location:'',handler:''};
 }
 
-/*  USER MANAGEMENT  */
+/* ══ USER MANAGEMENT ════════════════════════════════════════ */
 function renderUsers(){
   const ul=document.getElementById('users-list');
   const users=accounts.filter(a=>a.role!=='admin');
@@ -1111,7 +1111,7 @@ function deleteUser(uid){
   save();renderAll();renderUsers();toast('User removed.');
 }
 
-/*  ACTIVITY LOGS PAGE (Admin)  */
+/* ══ ACTIVITY LOGS PAGE (Admin) ═════════════════════════════ */
 function renderActivityLogs(){
   const filterEl=document.getElementById('actlog-user-filter');
   const selectedUid=filterEl.value;
@@ -1146,7 +1146,7 @@ function clearActivityLogs(){
   save();renderActivityLogs();toast('Activity logs cleared.');
 }
 
-/*  ADD DOCUMENT  */
+/* ══ ADD DOCUMENT ═══════════════════════════════════════════ */
 function previewFile(input){
   const preview=document.getElementById('file-preview');
   const nameEl=document.getElementById('file-preview-name');
@@ -1155,7 +1155,7 @@ function previewFile(input){
     const f=input.files[0];
     if(f.size>2*1024*1024){
       input.value='';preview.style.display='none';
-      toast(' File too large. Maximum size is 2 MB.');return;
+      toast('⚠️ File too large. Maximum size is 2 MB.');return;
     }
     nameEl.textContent=f.name;
     sizeEl.textContent='('+( f.size/1024).toFixed(1)+' KB)';
@@ -1173,7 +1173,7 @@ function addDocument(){
   if(!name||!type||!by||!purpose){ toast('Please fill in all required fields.'); return; }
   const fileInput=document.getElementById('fileUpload');
   const file=fileInput.files[0]||null;
-  if(file&&file.size>2*1024*1024){ toast(' File too large. Maximum allowed size is 2 MB.'); return; }
+  if(file&&file.size>2*1024*1024){ toast('⚠️ File too large. Maximum allowed size is 2 MB.'); return; }
   const btn    =document.getElementById('save-btn');
   const overlay=document.getElementById('encrypt-overlay');
   const bar    =document.getElementById('encrypt-bar');
@@ -1188,7 +1188,7 @@ function addDocument(){
     [65, 'Output transformation…',      'Final multiply & add operations'],
     [85, 'Applying PKCS#7 padding…',    'Block-aligning plaintext'],
     [95, 'Finalizing ciphertext…',      'Converting to HEX representation'],
-    [100,' Encryption complete!',      'Document secured & ready to save'],
+    [100,'✅ Encryption complete!',      'Document secured & ready to save'],
   ];
   function startAnimation(fileData, fileExt){
     let i=0;
@@ -1245,7 +1245,7 @@ function showRegisterReceipt(doc){
   document.getElementById('receipt-date').textContent    =doc.date;
   document.getElementById('receipt-status').textContent  =doc.status;
   document.getElementById('receipt-file').textContent    =
-    doc.fileData?' '+(doc.fileExt?doc.fileExt.replace('.','').toUpperCase():'File')+' attached':'None';
+    doc.fileData?'📎 '+(doc.fileExt?doc.fileExt.replace('.','').toUpperCase():'File')+' attached':'None';
   document.getElementById('receipt-enc-proof').textContent=
     'Key: Group6CITKey2024\nAlgo: IDEA · 128-bit · 8 Rounds\nEncrypted: '+doc.enc.slice(0,32)+'…\nDecrypted: '+IDEA.decrypt(doc.enc,KEY);
   document.getElementById('receipt-file-notice').style.display=doc.fileData?'block':'none';
@@ -1274,7 +1274,7 @@ function showRegisterReceipt(doc){
   const receiptDiv=document.getElementById('register-receipt');
   receiptDiv.style.display='block';
   receiptDiv.scrollIntoView({behavior:'smooth',block:'start'});
-  toast(' Document saved successfully!');
+  toast('✅ Document saved successfully!');
 }
 
 function registerAnother(){
@@ -1283,7 +1283,7 @@ function registerAnother(){
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
-/*  DELETE DOC  */
+/* ══ DELETE DOC ═════════════════════════════════════════════ */
 function deleteDoc(id){
   if(!confirm('Delete this document? This cannot be undone.'))return;
   const d=docs.find(d=>d.id===id);
@@ -1293,9 +1293,9 @@ function deleteDoc(id){
   save();renderAll();toast('Document removed.');
 }
 
-/*  UPDATE STATUS  */
+/* ══ UPDATE STATUS ══════════════════════════════════════════ */
 function openUpdate(id){
-  if(!currentUser||currentUser.role!=='admin'){toast(' Only administrators can update document status.');return;}
+  if(!currentUser||currentUser.role!=='admin'){toast('⛔ Only administrators can update document status.');return;}
   const d=docs.find(d=>d.id===id);if(!d)return;
   updateDocId=id;
   document.getElementById('upd-id').value=id;
@@ -1309,9 +1309,9 @@ function openUpdate(id){
 }
 
 function applyUpdate(){
-  //  GUARD: Only admin can update status 
+  // ── GUARD: Only admin can update status ──
   if(!currentUser||currentUser.role!=='admin'){
-    toast(' Only administrators can update document status.');
+    toast('⛔ Only administrators can update document status.');
     closeModal('update-modal');
     return;
   }
@@ -1331,15 +1331,15 @@ function applyUpdate(){
     location,
     handler
   });
-  addNotification(d.ownerId,`Your document "${d.name}" status changed to <strong>${newStatus}</strong>${location?' ·  '+location:''}${handler?' ·  '+handler:''}${note?' — '+note:''}`,d.id);
+  addNotification(d.ownerId,`Your document "${d.name}" status changed to <strong>${newStatus}</strong>${location?' · 📍 '+location:''}${handler?' · 👤 '+handler:''}${note?' — '+note:''}`,d.id);
   logActivity(currentUser.id,`Updated "${d.name}" → ${newStatus}${location?' @ '+location:''}${handler?' ('+handler+')':''}`, statusColor(newStatus));
   if(d.ownerId!==currentUser.id){
     logActivity(d.ownerId,`Document "${d.name}" status changed to ${newStatus}`, statusColor(newStatus));
   }
-  save();renderAll();closeModal('update-modal');toast(` Status updated to "${newStatus}"`);
+  save();renderAll();closeModal('update-modal');toast(`✅ Status updated to "${newStatus}"`);
 }
 
-/*  QR CODE  */
+/* ══ QR CODE ════════════════════════════════════════════════ */
 function docOffice(type){
   const m={Academic:'Office of the Registrar',Laboratory:'Laboratory Office',Administrative:'Administrative Office',Financial:'Accounting Office',Other:'Document Control Office'};
   return m[type]||'Document Control Office';
@@ -1376,11 +1376,11 @@ function decodeSnapshot(str){
 function buildQR(id,baseUrl){
   const d=docs.find(function(d){return d.id===id;});if(!d)return;
 
-  /*  CROSS-DEVICE FIX: Encode a full document snapshot in the URL.
+  /* ── CROSS-DEVICE FIX: Encode a full document snapshot in the URL.
      LocalStorage is per-device — a phone has no data from the admin PC.
      Encoding a snapshot means any phone can decode and display the doc
      without needing LocalStorage. The admin device still prefers the
-     live LocalStorage copy for the most current status.  */
+     live LocalStorage copy for the most current status. ── */
   const snap={
     id:d.id, name:d.name, type:d.type, by:d.by,
     purpose:d.purpose, status:d.status, date:d.date,
@@ -1415,7 +1415,7 @@ function openQR(id){
   document.getElementById('qr-status').textContent='Status: '+d.status+'  ·  ID: '+d.id;
   document.getElementById('qr-wrap').innerHTML='';
   document.getElementById('qr-url-preview').style.display='none';
-  //  FIX 1: Auto-detect the current page URL so the QR always works without manual setup 
+  // ── FIX 1: Auto-detect the current page URL so the QR always works without manual setup ──
   const saved=getSavedBaseUrl()||(window.location.origin+window.location.pathname);
   localStorage.setItem('cit_qr_base_url',saved);
   document.getElementById('qr-base-url').value=saved;
@@ -1451,7 +1451,7 @@ function confirmScanLog(){
   closeModal('scan-log-modal');
   renderScanResult(d);
   openModal('scan-result-modal');
-  toast(' Movement logged successfully!');
+  toast('📍 Movement logged successfully!');
 }
 
 function skipScanLog(){
@@ -1462,7 +1462,7 @@ function skipScanLog(){
   openModal('scan-result-modal');
 }
 
-/*  LOG MOVEMENT  */
+/* ══ LOG MOVEMENT ════════════════════════════════════════════ */
 function logMovement(documentId, handledBy, location){
   const entry={
     documentId,
@@ -1477,11 +1477,11 @@ function logMovement(documentId, handledBy, location){
   save();
   // Also log to activity logs for audit trail
   if(currentUser){
-    logActivity(currentUser.id,` QR scanned "${docs.find(d=>d.id===documentId)?.name||documentId}" → ${location}`,'#4ade80');
+    logActivity(currentUser.id,`📍 QR scanned "${docs.find(d=>d.id===documentId)?.name||documentId}" → ${location}`,'#4ade80');
   }
 }
 
-/*  TRACK DOCUMENT PAGE — Search by ID  */
+/* ══ TRACK DOCUMENT PAGE — Search by ID ════════════════════════ */
 function searchByTrackingId(){
   const raw=(document.getElementById('track-id-input').value||'').trim().toUpperCase();
   const docId=raw.startsWith('DOC-')?raw:'DOC-'+raw;
@@ -1496,7 +1496,7 @@ function searchByTrackingId(){
     result.innerHTML=`
       <div class="card">
         <div class="card-body" style="text-align:center;padding:36px">
-          <div style="font-size:40px;margin-bottom:12px"></div>
+          <div style="font-size:40px;margin-bottom:12px">🔍</div>
           <p style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:6px">Document Not Found</p>
           <p style="font-size:13px;color:var(--muted)">No document with ID <code style="background:#f1f5f9;padding:2px 6px;border-radius:4px">${docId}</code> exists in this device.</p>
         </div>
@@ -1514,13 +1514,13 @@ function searchByTrackingId(){
 
   /* Workflow dots */
   const wfDots=isRejected
-    ?`<div style="text-align:center;width:100%;padding:8px 0"><span style="font-size:13px;color:#ef4444;font-weight:600"> Document was Rejected</span></div>`
+    ?`<div style="text-align:center;width:100%;padding:8px 0"><span style="font-size:13px;color:#ef4444;font-weight:600">⛔ Document was Rejected</span></div>`
     :workflow.map(function(step,i){
         const done=curIdx>i,curr=curIdx===i;
         const cls=done?'done':curr?'current':'';
         return (i>0?'<div class="twf-arrow">›</div>':'')+
           `<div class="twf-step">
-             <div class="twf-dot ${cls}">${done?'':i+1}</div>
+             <div class="twf-dot ${cls}">${done?'✓':i+1}</div>
              <div class="twf-label ${cls}">${step}</div>
            </div>`;
       }).join('');
@@ -1544,7 +1544,7 @@ function searchByTrackingId(){
     :[..._combined].reverse().map(function(h){
         const isScan=h._type==='scan';
         const dotCls=isScan?'received':(h.status||'').toLowerCase().replace(/\s+/g,'');
-        const actionLabel=isScan?' QR Scanned':' Status Update';
+        const actionLabel=isScan?'📱 QR Scanned':'🔄 Status Update';
         const actionBg=isScan?'#f0fdf4':'#eff6ff';
         const actionColor=isScan?'#15803d':'#1d4ed8';
         const actionBorder=isScan?'#bbf7d0':'#bfdbfe';
@@ -1555,7 +1555,7 @@ function searchByTrackingId(){
           </div>
           <div class="ttl-status-label">${isScan?('Handled by '+h.by):(h.status||'—')}</div>
           <div class="ttl-meta">${isScan?'':('Updated by '+h.by+' &nbsp;·&nbsp; ')}${h.date}</div>
-          ${(h.location||h.handler)?`<div class="ttl-loc">${h.location?' '+h.location:''}${h.location&&h.handler?' &nbsp;·&nbsp; ':''}${h.handler?' '+h.handler:''}</div>`:''}
+          ${(h.location||h.handler)?`<div class="ttl-loc">${h.location?'📍 '+h.location:''}${h.location&&h.handler?' &nbsp;·&nbsp; ':''}${h.handler?'👤 '+h.handler:''}</div>`:''}
           ${h.note?`<div class="ttl-note">"${h.note}"</div>`:''}
         </div>`;
       }).join('');
@@ -1572,20 +1572,20 @@ function searchByTrackingId(){
           :`<p style="font-size:13px;color:var(--muted);margin-bottom:14px">Preview not available for this file type.</p>`;
       fileSection=`
         <div class="card" style="margin-top:16px">
-          <div class="card-head"><h3> &nbsp;Attached File — Released</h3></div>
+          <div class="card-head"><h3>📎 &nbsp;Attached File — Released</h3></div>
           <div class="card-body" style="text-align:center">
-            <div style="display:inline-flex;align-items:center;gap:6px;padding:5px 14px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:20px;font-size:11px;font-weight:700;color:#16a34a;margin-bottom:14px"> Available for Download</div>
+            <div style="display:inline-flex;align-items:center;gap:6px;padding:5px 14px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:20px;font-size:11px;font-weight:700;color:#16a34a;margin-bottom:14px">✅ Available for Download</div>
             ${preview}
             <a href="${d.fileData}" download="${d.name.replace(/[^a-z0-9_\-]/gi,'_')}${d.fileExt||''}"
-               class="btn btn-primary" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;"> Download File</a>
+               class="btn btn-primary" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;">⬇ Download File</a>
           </div>
         </div>`;
     }else{
       fileSection=`
         <div class="card" style="margin-top:16px">
-          <div class="card-head"><h3> &nbsp;Attached File</h3></div>
+          <div class="card-head"><h3>📎 &nbsp;Attached File</h3></div>
           <div class="card-body" style="text-align:center;padding:28px">
-            <div style="font-size:36px;margin-bottom:10px"></div>
+            <div style="font-size:36px;margin-bottom:10px">🔒</div>
             <p style="font-size:14px;font-weight:600;margin-bottom:6px">File is Secured</p>
             <p style="font-size:13px;color:var(--muted);line-height:1.6">Available once status reaches <strong>Released</strong>. Current: <strong style="color:${sc}">${d.status}</strong></p>
           </div>
@@ -1612,7 +1612,7 @@ function searchByTrackingId(){
 
           <!-- QR re-generation -->
           <div style="text-align:center">
-            <p style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.4px"> Permanent QR Code</p>
+            <p style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.4px">📱 Permanent QR Code</p>
             <div id="track-search-qr-inner" style="display:inline-block;padding:10px;background:#fff;border:2px solid var(--border);border-radius:10px;margin-bottom:8px"></div>
             <p style="font-size:10px;color:var(--muted);margin-bottom:4px">Scan to track anytime</p>
             <p style="font-size:9px;color:#94a3b8;font-family:'DM Mono',monospace;word-break:break-all;line-height:1.5">${trackUrl}</p>
@@ -1622,8 +1622,8 @@ function searchByTrackingId(){
           <div>
             ${lastLoc.location||lastLoc.handler?`
             <div style="display:flex;gap:16px;flex-wrap:wrap;padding:10px 14px;background:#f8fafc;border:1px solid var(--border);border-radius:8px;margin-bottom:14px">
-              ${lastLoc.location?`<span style="font-size:13px"> <strong>${lastLoc.location}</strong></span>`:''}
-              ${lastLoc.handler?`<span style="font-size:13px"> <strong>${lastLoc.handler}</strong></span>`:''}
+              ${lastLoc.location?`<span style="font-size:13px">📍 <strong>${lastLoc.location}</strong></span>`:''}
+              ${lastLoc.handler?`<span style="font-size:13px">👤 <strong>${lastLoc.handler}</strong></span>`:''}
             </div>`:''}
             <p style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px">Document Progress</p>
             <div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-bottom:18px" class="track-workflow">${wfDots}</div>
@@ -1646,7 +1646,7 @@ function searchByTrackingId(){
   },80);
 
   result.scrollIntoView({behavior:'smooth',block:'start'});
-  toast(' Document found! QR code regenerated.');
+  toast('✅ Document found! QR code regenerated.');
 }
 
 function renderScanResult(d){
@@ -1659,13 +1659,13 @@ function renderScanResult(d){
   const lastLoc=getLatestLocation(d);
 
   const wfDots=isRejected
-    ?`<div style="text-align:center;padding:16px 0;color:#f87171;font-size:13px;font-weight:600"> Document Rejected</div>`
+    ?`<div style="text-align:center;padding:16px 0;color:#f87171;font-size:13px;font-weight:600">⛔ Document Rejected</div>`
     :workflow.map((s,i)=>{
         const done=curIdx>i,curr=curIdx===i;
         const bg=curr?sc:done?'#22c55e22':'rgba(255,255,255,.04)';
         const bc=curr?sc:done?'#22c55e55':'rgba(255,255,255,.08)';
         const tc=curr?'#fff':done?'#22c55e':'rgba(255,255,255,.2)';
-        const icon=done?'':curr?'':i+1;
+        const icon=done?'✓':curr?'●':i+1;
         return `${i>0?`<div style="flex:1;height:2px;background:${done?'#22c55e33':'rgba(255,255,255,.06)'};margin-top:13px;min-width:8px"></div>`:''}
           <div style="display:flex;flex-direction:column;align-items:center;gap:4px;min-width:44px">
             <div style="width:26px;height:26px;border-radius:50%;background:${bg};border:2px solid ${bc};color:${tc};display:grid;place-items:center;font-size:11px;font-weight:700${curr?';box-shadow:0 0 10px '+sc+'66':''}">${icon}</div>
@@ -1699,7 +1699,7 @@ function renderScanResult(d){
     :hist.map(h=>{
         const isScan=h._type==='scan';
         const dc={Released:'#22c55e',Rejected:'#ef4444',Approved:'#16a34a',Signed:'#16a34a',Processing:'#f59e0b',Pending:'#f59e0b','For Approval':'#3b82f6',Received:'#64748b'}[h.status]||'#4ade80';
-        const actionLabel=isScan?' QR Scanned':' Status Update';
+        const actionLabel=isScan?'📱 QR Scanned':'🔄 Status Update';
         const actionBg=isScan?'rgba(74,222,128,.12)':'rgba(59,130,246,.12)';
         const actionColor=isScan?'#4ade80':'#93c5fd';
         const actionBorder=isScan?'rgba(74,222,128,.25)':'rgba(59,130,246,.25)';
@@ -1709,8 +1709,8 @@ function renderScanResult(d){
             <div style="display:inline-flex;align-items:center;padding:2px 8px;background:${actionBg};border:1px solid ${actionBorder};border-radius:20px;font-size:9px;font-weight:700;color:${actionColor};letter-spacing:.4px;text-transform:uppercase;margin-bottom:4px">${actionLabel}</div>
             <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,.85)">${isScan?'Handled by '+h.by:(h.status||'—')}</div>
             <div style="font-size:10px;color:rgba(255,255,255,.35);margin-top:2px">${isScan?'':('By '+h.by+' · ')}${h.date}</div>
-            ${h.location?`<div style="font-size:10px;color:rgba(74,222,128,.6);margin-top:2px"> ${h.location}${h.handler?' ·  '+h.handler:''}</div>`:''}
-            ${!isScan&&h.handler&&!h.location?`<div style="font-size:10px;color:rgba(74,222,128,.6);margin-top:2px"> ${h.handler}</div>`:''}
+            ${h.location?`<div style="font-size:10px;color:rgba(74,222,128,.6);margin-top:2px">📍 ${h.location}${h.handler?' · 👤 '+h.handler:''}</div>`:''}
+            ${!isScan&&h.handler&&!h.location?`<div style="font-size:10px;color:rgba(74,222,128,.6);margin-top:2px">👤 ${h.handler}</div>`:''}
             ${h.note?`<div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:4px;padding:6px 10px;background:rgba(255,255,255,.04);border-radius:5px;font-style:italic">"${h.note}"</div>`:''}
           </div>
         </div>`;
@@ -1729,8 +1729,8 @@ function renderScanResult(d){
   const fileSection = d.fileData
     ? (isScanReleased
       ? `<div style="padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.06)">
-          <div style="font-size:9px;font-weight:700;color:rgba(74,222,128,.35);letter-spacing:.8px;text-transform:uppercase;margin-bottom:12px"> Attached Document File</div>
-          <div style="display:inline-flex;align-items:center;gap:6px;padding:5px 14px;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);border-radius:20px;font-size:11px;font-weight:700;color:#22c55e;margin-bottom:12px"> Released — File Available</div>
+          <div style="font-size:9px;font-weight:700;color:rgba(74,222,128,.35);letter-spacing:.8px;text-transform:uppercase;margin-bottom:12px">📎 Attached Document File</div>
+          <div style="display:inline-flex;align-items:center;gap:6px;padding:5px 14px;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);border-radius:20px;font-size:11px;font-weight:700;color:#22c55e;margin-bottom:12px">✅ Released — File Available</div>
           ${(d.fileExt||'').toLowerCase()==='.pdf'
             ?`<iframe src="${d.fileData}" style="width:100%;height:320px;border:1px solid rgba(255,255,255,.1);border-radius:8px;margin-bottom:12px" title="Document Preview"></iframe>`
             :['.jpg','.jpeg','.png','.gif','.webp'].includes((d.fileExt||'').toLowerCase())
@@ -1739,14 +1739,14 @@ function renderScanResult(d){
           <div style="text-align:center">
             <a href="${d.fileData}" download="${d.name.replace(/[^a-z0-9_\-]/gi,'_')}${d.fileExt||''}"
                style="display:inline-flex;align-items:center;gap:8px;padding:10px 22px;background:#22c55e;color:#0d1117;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;text-decoration:none;">
-               Download File
+              ⬇ Download File
             </a>
           </div>
         </div>`
       : `<div style="padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.06)">
-          <div style="font-size:9px;font-weight:700;color:rgba(74,222,128,.35);letter-spacing:.8px;text-transform:uppercase;margin-bottom:12px"> Attached Document File</div>
+          <div style="font-size:9px;font-weight:700;color:rgba(74,222,128,.35);letter-spacing:.8px;text-transform:uppercase;margin-bottom:12px">📎 Attached Document File</div>
           <div style="text-align:center;padding:24px 0">
-            <div style="font-size:36px;margin-bottom:10px"></div>
+            <div style="font-size:36px;margin-bottom:10px">🔒</div>
             <p style="font-size:13px;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:6px">File is Secured</p>
             <p style="font-size:12px;color:rgba(255,255,255,.35);margin-bottom:14px;line-height:1.6">Available once status reaches <strong style="color:rgba(74,222,128,.7)">Released</strong>.</p>
             <div style="display:inline-flex;align-items:center;gap:6px;padding:5px 14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:20px;font-size:11px;color:rgba(255,255,255,.4)">
@@ -1755,7 +1755,7 @@ function renderScanResult(d){
           </div>
         </div>`)
     : `<div style="padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.06)">
-        <div style="font-size:9px;font-weight:700;color:rgba(74,222,128,.35);letter-spacing:.8px;text-transform:uppercase;margin-bottom:12px"> Attached Document File</div>
+        <div style="font-size:9px;font-weight:700;color:rgba(74,222,128,.35);letter-spacing:.8px;text-transform:uppercase;margin-bottom:12px">📎 Attached Document File</div>
         <p style="font-size:12px;color:rgba(255,255,255,.3);text-align:center;padding:12px 0">No digital file attached to this document.</p>
       </div>`;
 
@@ -1769,8 +1769,8 @@ function renderScanResult(d){
     </div>
     ${lastLoc.location||lastLoc.handler?`
     <div style="padding:12px 18px;border-bottom:1px solid rgba(255,255,255,.06);background:rgba(74,222,128,.04);display:flex;gap:16px;flex-wrap:wrap">
-      ${lastLoc.location?`<div style="display:flex;align-items:center;gap:6px;font-size:12px"><span style="color:rgba(74,222,128,.5)"> Location</span><span style="color:rgba(255,255,255,.8);font-weight:600">${lastLoc.location}</span></div>`:''}
-      ${lastLoc.handler?`<div style="display:flex;align-items:center;gap:6px;font-size:12px"><span style="color:rgba(74,222,128,.5)"> Handled By</span><span style="color:rgba(255,255,255,.8);font-weight:600">${lastLoc.handler}</span></div>`:''}
+      ${lastLoc.location?`<div style="display:flex;align-items:center;gap:6px;font-size:12px"><span style="color:rgba(74,222,128,.5)">📍 Location</span><span style="color:rgba(255,255,255,.8);font-weight:600">${lastLoc.location}</span></div>`:''}
+      ${lastLoc.handler?`<div style="display:flex;align-items:center;gap:6px;font-size:12px"><span style="color:rgba(74,222,128,.5)">👤 Handled By</span><span style="color:rgba(255,255,255,.8);font-weight:600">${lastLoc.handler}</span></div>`:''}
     </div>`:''}
     <div style="padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.06)">
       <div style="font-size:9px;font-weight:700;color:rgba(255,255,255,.25);letter-spacing:.8px;text-transform:uppercase;margin-bottom:12px">Document Progress</div>
@@ -1790,12 +1790,12 @@ function renderScanResult(d){
     </div>
     ${fileSection}
     <div style="padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.06)">
-      <div style="font-size:9px;font-weight:700;color:rgba(74,222,128,.35);letter-spacing:.8px;text-transform:uppercase;margin-bottom:6px"> Full Audit Trail (IDEA Encrypted)</div>
+      <div style="font-size:9px;font-weight:700;color:rgba(74,222,128,.35);letter-spacing:.8px;text-transform:uppercase;margin-bottom:6px">🔐 Full Audit Trail (IDEA Encrypted)</div>
       <p style="font-size:10px;color:rgba(255,255,255,.25);margin-bottom:12px;line-height:1.5">Each audit entry is IDEA-128 encrypted. Only authorized administrators with the system key can decrypt this data.</p>
       ${encAuditHtml||'<p style="font-size:11px;color:rgba(255,255,255,.2)">No audit entries.</p>'}
     </div>
     <div style="padding:16px 18px">
-      <div style="font-size:9px;font-weight:700;color:rgba(74,222,128,.35);letter-spacing:.8px;text-transform:uppercase;margin-bottom:10px"> IDEA Encryption Proof</div>
+      <div style="font-size:9px;font-weight:700;color:rgba(74,222,128,.35);letter-spacing:.8px;text-transform:uppercase;margin-bottom:10px">🛡️ IDEA Encryption Proof</div>
       <div style="background:rgba(0,0,0,.3);border:1px solid rgba(74,222,128,.1);border-radius:8px;padding:12px 14px">
         ${[['Key','Group6CITKey2024'],['Algorithm','IDEA · 128-bit · 8 Rounds'],['Encrypted',d.enc.slice(0,28)+'…'],['Decrypted',IDEA.decrypt(d.enc,KEY)]].map(([l,v])=>`
           <div style="display:flex;gap:8px;margin-bottom:7px;font-size:10px;font-family:'DM Mono',monospace">
@@ -1807,7 +1807,7 @@ function renderScanResult(d){
     </div>`;
 }
 
-/*  NOTIFICATION CLICK  */
+/* ══ NOTIFICATION CLICK ═════════════════════════════════════ */
 function openDocumentFromNotif(documentId){
   const doc=docs.find(d=>d.id===documentId);
   if(!doc){toast('Document not found.');return;}
@@ -1816,7 +1816,7 @@ function openDocumentFromNotif(documentId){
   setTimeout(()=>openHistory(documentId),150);
 }
 
-/*  HISTORY — Unified Timeline  */
+/* ══ HISTORY — Unified Timeline ══════════════════════════════ */
 function openHistory(id){
   const d=docs.find(d=>d.id===id);if(!d)return;
   document.getElementById('hist-name').textContent=d.name;
@@ -1860,7 +1860,7 @@ function openHistory(id){
   } else {
     tl.innerHTML=allEntries.map((e,i)=>{
       const isScan=e.type==='scan';
-      const icon=isScan?'':'';
+      const icon=isScan?'📱':'🔄';
       const actionClass=isScan?'hist-action-scan':'hist-action-status';
       const iconClass=isScan?'scan':'status';
       const actionLabel=isScan?'QR Scanned':'Status Update';
@@ -1877,8 +1877,8 @@ function openHistory(id){
           <div class="hist-entry-meta">
             ${isScan?'':'By '+e.by+' &nbsp;·&nbsp; '}${e.date}
           </div>
-          ${e.location?`<div class="hist-entry-loc"> ${e.location}${e.handler?' &nbsp;·&nbsp;  '+e.handler:''}</div>`:''}
-          ${!isScan&&e.handler&&!e.location?`<div class="hist-entry-loc"> ${e.handler}</div>`:''}
+          ${e.location?`<div class="hist-entry-loc">📍 ${e.location}${e.handler?' &nbsp;·&nbsp; 👤 '+e.handler:''}</div>`:''}
+          ${!isScan&&e.handler&&!e.location?`<div class="hist-entry-loc">👤 ${e.handler}</div>`:''}
           ${e.note?`<div class="hist-entry-note">"${e.note}"</div>`:''}
         </div>
       </div>`;
@@ -1887,7 +1887,7 @@ function openHistory(id){
   openModal('history-modal');
 }
 
-/*  NOTIFICATIONS  */
+/* ══ NOTIFICATIONS ══════════════════════════════════════════ */
 function addNotification(userId,msg,documentId){
   if(!notifications[userId]) notifications[userId]=[];
   notifications[userId].push({id:Date.now(),msg,date:nowStr(),read:false,documentId:documentId||null});
@@ -1936,7 +1936,7 @@ function markAllRead(){
 }
 document.getElementById('notif-btn').onclick=openNotifModal;
 
-/*  SETTINGS  */
+/* ══ SETTINGS ═══════════════════════════════════════════════ */
 function changePassword(){
   const cur=document.getElementById('cur-pass').value;
   const np=document.getElementById('new-pass').value;
@@ -1955,7 +1955,7 @@ function changePassword(){
   setTimeout(()=>logout(),1500);
 }
 
-/*  DEMO  */
+/* ══ DEMO ════════════════════════════════════════════════════ */
 function runDemo(){
   const key=document.getElementById('demo-key').value||KEY;
   const msg=document.getElementById('demo-msg').value||'Hello CIT!';
@@ -1967,7 +1967,7 @@ function runDemo(){
   toast('Encryption demo complete!');
 }
 
-/*  TRACKING PAGE (Public)  */
+/* ══ TRACKING PAGE (Public) ════════════════════════════════ */
 function initTrackingPage(){
   const params=new URLSearchParams(window.location.search);
   const encParam=params.get('track');
@@ -1979,7 +1979,7 @@ function initTrackingPage(){
       const update=decodeSnapshot(applyParam);
       const idx=docs.findIndex(function(d){return d.id===update.docId;});
       if(idx===-1){
-        if(confirm(' Document not found in this browser.\nAre you the admin? Make sure you are on the correct device.'));
+        if(confirm('⚠️ Document not found in this browser.\nAre you the admin? Make sure you are on the correct device.'));
         return false;
       }
       const doc=docs[idx];
@@ -1993,7 +1993,7 @@ function initTrackingPage(){
       save();
       renderAll&&renderAll();
       window.history.replaceState({},'',window.location.pathname);
-      alert(' Update applied!\n\nDocument: '+doc.name+'\nNew status: '+update.status+'\nLocation: '+update.location+'\nHandler: '+update.handler);
+      alert('✅ Update applied!\n\nDocument: '+doc.name+'\nNew status: '+update.status+'\nLocation: '+update.location+'\nHandler: '+update.handler);
     }catch(e){alert('Could not apply update. Invalid link.');}
     return false;
   }
@@ -2002,19 +2002,19 @@ function initTrackingPage(){
 
   load();
 
-  //  FIX 2: Hide auth screen so tracking page is fully visible 
+  // ── FIX 2: Hide auth screen so tracking page is fully visible ──
   document.getElementById('auth-screen').classList.remove('auth-show');
 
   const screen=document.getElementById('track-screen');
   screen.classList.add('show');
 
   try{
-    /*  CROSS-DEVICE FIX 
+    /* ── CROSS-DEVICE FIX ──────────────────────────────────────────────
        The QR now encodes a full document snapshot in the URL as Base64
        JSON. This works on ANY phone — no LocalStorage needed.
        If we're on the admin device, we also check LocalStorage for a
        live copy with a newer status and prefer it.
-     */
+    ──────────────────────────────────────────────────────────────────── */
     let d=null;
 
     // PRIMARY: try to decode as a Base64 JSON snapshot (new format)
@@ -2040,7 +2040,7 @@ function initTrackingPage(){
 
     if(!d){
       document.getElementById('track-content-hero').innerHTML=`
-        <div class="track-doc-badge" style="background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.3)"></div>
+        <div class="track-doc-badge" style="background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.3)">⚠️</div>
         <div class="track-doc-name">Document Not Found</div>
         <div class="track-doc-meta">QR code may be outdated — please regenerate it from the admin panel</div>`;
       document.getElementById('track-content-body').innerHTML=`
@@ -2060,7 +2060,7 @@ function initTrackingPage(){
     const lastLoc=getLatestLocation(d);
 
     document.getElementById('track-content-hero').innerHTML=`
-      <div class="track-doc-badge" style="background:rgba(74,222,128,.08);border-color:rgba(74,222,128,.25)"></div>
+      <div class="track-doc-badge" style="background:rgba(74,222,128,.08);border-color:rgba(74,222,128,.25)">🔐</div>
       <div class="track-doc-name" style="font-family:'DM Mono',monospace;font-size:13px;word-break:break-all;padding:0 16px;color:rgba(74,222,128,.85)">${d.enc}</div>
       <div class="track-doc-meta" style="margin-top:8px">${d.id} &nbsp;·&nbsp; ${d.type}</div>
       <div class="track-status-pill" style="background:${sColor}22;border:1px solid ${sColor}55;color:${sColor}">
@@ -2070,7 +2070,7 @@ function initTrackingPage(){
 
     const wfHtml=isRejected
       ?`<div style="text-align:center;width:100%;padding:8px 0">
-           <span style="font-size:13px;color:#f87171;font-weight:600"> Document was Rejected</span>
+           <span style="font-size:13px;color:#f87171;font-weight:600">⛔ Document was Rejected</span>
            <p style="font-size:12px;color:rgba(255,255,255,.3);margin-top:4px">Check the history below for details.</p>
          </div>`
       :workflow.map((step,i)=>{
@@ -2078,7 +2078,7 @@ function initTrackingPage(){
           const cls=done?'done':curr?'current':'';
           return `${i>0?'<div class="twf-arrow">›</div>':''}
             <div class="twf-step">
-              <div class="twf-dot ${cls}">${done?'':i+1}</div>
+              <div class="twf-dot ${cls}">${done?'✓':i+1}</div>
               <div class="twf-label ${cls}">${step}</div>
             </div>`;
         }).join('');
@@ -2106,7 +2106,7 @@ function initTrackingPage(){
           const isScan=h._type==='scan';
           const dotCls=isScan?'scan':(h.status||'').toLowerCase().replace(/\s+/g,'');
           const dotStyle=isScan?'background:#4ade80;border-color:rgba(74,222,128,.5)':'';
-          const actionLabel=isScan?' QR Scanned':' Status Update';
+          const actionLabel=isScan?'📱 QR Scanned':'🔄 Status Update';
           const actionBg=isScan?'rgba(74,222,128,.12)':'rgba(59,130,246,.12)';
           const actionColor=isScan?'#4ade80':'#93c5fd';
           const actionBorder=isScan?'rgba(74,222,128,.25)':'rgba(59,130,246,.25)';
@@ -2117,7 +2117,7 @@ function initTrackingPage(){
             </div>
             <div class="ttl-status-label">${isScan?('Handled by '+h.by):(h.status||'—')}</div>
             <div class="ttl-meta">${isScan?'':('By '+h.by+' &nbsp;·&nbsp; ')}${h.date}</div>
-            ${(h.location||h.handler)?`<div class="ttl-loc">${h.location?' '+h.location:''}${h.location&&h.handler?' &nbsp;·&nbsp; ':''}${h.handler?' '+h.handler:''}</div>`:''}
+            ${(h.location||h.handler)?`<div class="ttl-loc">${h.location?'📍 '+h.location:''}${h.location&&h.handler?' &nbsp;·&nbsp; ':''}${h.handler?'👤 '+h.handler:''}</div>`:''}
             ${h.note?`<div class="ttl-note">"${h.note}"</div>`:''}
           </div>`;
         }).join('');
@@ -2131,9 +2131,9 @@ function initTrackingPage(){
       ?(isReleased
         /* RELEASED → real preview + download, no login gate */
         ?`<div class="track-card">
-            <div class="track-card-head"><h3> &nbsp;Attached File</h3></div>
+            <div class="track-card-head"><h3>📎 &nbsp;Attached File</h3></div>
             <div class="track-card-body" style="text-align:center">
-              <div style="display:inline-flex;align-items:center;gap:6px;padding:5px 14px;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);border-radius:20px;font-size:11px;font-weight:700;color:#22c55e;margin-bottom:16px"> Released — File Available for Download</div>
+              <div style="display:inline-flex;align-items:center;gap:6px;padding:5px 14px;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);border-radius:20px;font-size:11px;font-weight:700;color:#22c55e;margin-bottom:16px">✅ Released — File Available for Download</div>
               ${(d.fileExt||'').toLowerCase()==='.pdf'
                 ?`<iframe src="${d.fileData}" style="width:100%;height:400px;border:1px solid rgba(255,255,255,.1);border-radius:8px;margin-bottom:14px" title="Document Preview"></iframe>`
                 :['.jpg','.jpeg','.png','.gif','.webp'].includes((d.fileExt||'').toLowerCase())
@@ -2141,15 +2141,15 @@ function initTrackingPage(){
                   :`<p style="font-size:13px;color:rgba(255,255,255,.4);padding:20px 0">Preview not available for this file type.</p>`}
               <a href="${d.fileData}" download="${d.name.replace(/[^a-z0-9_\-]/gi,'_')}${d.fileExt||''}"
                  style="display:inline-flex;align-items:center;gap:8px;padding:11px 24px;background:#22c55e;color:#0d1117;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;text-decoration:none;">
-                 Download File
+                ⬇ Download File
               </a>
             </div>
           </div>`
         /* NOT YET RELEASED → file is secured, tell student when it unlocks */
         :`<div class="track-card">
-            <div class="track-card-head"><h3> &nbsp;Attached File</h3></div>
+            <div class="track-card-head"><h3>📎 &nbsp;Attached File</h3></div>
             <div class="track-card-body" style="text-align:center;padding:32px">
-              <div style="font-size:40px;margin-bottom:12px"></div>
+              <div style="font-size:40px;margin-bottom:12px">🔒</div>
               <p style="font-size:14px;color:rgba(255,255,255,.7);font-weight:600;margin-bottom:8px">File is Secured</p>
               <p style="font-size:12px;color:rgba(255,255,255,.35);line-height:1.7;margin-bottom:16px">
                 A file is attached to this document.<br>
@@ -2164,21 +2164,21 @@ function initTrackingPage(){
       :d.hasFile
         ?(isReleased
           ?`<div class="track-card">
-              <div class="track-card-head"><h3> &nbsp;Attached File</h3></div>
+              <div class="track-card-head"><h3>📎 &nbsp;Attached File</h3></div>
               <div class="track-card-body" style="text-align:center;padding:32px">
-                <div style="display:inline-flex;align-items:center;gap:6px;padding:5px 14px;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);border-radius:20px;font-size:11px;font-weight:700;color:#22c55e;margin-bottom:16px"> Released</div>
+                <div style="display:inline-flex;align-items:center;gap:6px;padding:5px 14px;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);border-radius:20px;font-size:11px;font-weight:700;color:#22c55e;margin-bottom:16px">✅ Released</div>
                 <p style="font-size:14px;color:rgba(255,255,255,.7);font-weight:600;margin-bottom:6px">${d.name}${d.fileExt||''}</p>
                 <p style="font-size:12px;color:rgba(255,255,255,.35);margin-bottom:18px">Sign in on the admin device to download this file.</p>
                 <div class="login-required-box">
-                  <p> &nbsp;Sign in to view or download.</p>
+                  <p>🔒 &nbsp;Sign in to view or download.</p>
                   <a href="${window.location.pathname}">Sign In</a>
                 </div>
               </div>
             </div>`
           :`<div class="track-card">
-              <div class="track-card-head"><h3> &nbsp;Attached File</h3></div>
+              <div class="track-card-head"><h3>📎 &nbsp;Attached File</h3></div>
               <div class="track-card-body" style="text-align:center;padding:32px">
-                <div style="font-size:40px;margin-bottom:12px"></div>
+                <div style="font-size:40px;margin-bottom:12px">🔒</div>
                 <p style="font-size:14px;color:rgba(255,255,255,.7);font-weight:600;margin-bottom:8px">File is Secured</p>
                 <p style="font-size:12px;color:rgba(255,255,255,.35);line-height:1.7;margin-bottom:16px">
                   A file is attached. Available to download once status reaches <strong style="color:rgba(74,222,128,.8)">Released</strong>.
@@ -2190,7 +2190,7 @@ function initTrackingPage(){
             </div>`)
       /* No file at all */
       :`<div class="track-card">
-          <div class="track-card-head"><h3> &nbsp;Attached File</h3></div>
+          <div class="track-card-head"><h3>📎 &nbsp;Attached File</h3></div>
           <div class="track-card-body" style="text-align:center;padding:28px">
             <p style="font-size:13px;color:rgba(255,255,255,.3)">No digital file attached to this document.</p>
           </div>
@@ -2201,7 +2201,7 @@ function initTrackingPage(){
       <div class="track-card scan-move-log" style="border-color:rgba(74,222,128,.2)">
         <div class="track-card-head" style="background:rgba(74,222,128,.05);border-bottom:1px solid rgba(74,222,128,.1)">
           <div style="display:flex;align-items:center;gap:8px">
-            <span style="font-size:16px"></span>
+            <span style="font-size:16px">📍</span>
             <div>
               <h3 style="color:rgba(74,222,128,.9);font-size:13px">Log Your Scan</h3>
               <p style="font-size:10px;color:rgba(255,255,255,.3);margin-top:1px">Record that you handled this document (no status change)</p>
@@ -2211,7 +2211,7 @@ function initTrackingPage(){
         <div class="track-card-body" style="padding:18px 20px" id="report-move-body">
           <div style="padding:10px 14px;background:rgba(74,222,128,.07);border:1px solid rgba(74,222,128,.15);border-radius:8px;margin-bottom:14px">
             <p style="font-size:12px;color:rgba(74,222,128,.8);line-height:1.5">
-               <strong>Scanning logs movement only.</strong> It does <u>not</u> change the document status. Only the admin can update the status.
+              ✅ <strong>Scanning logs movement only.</strong> It does <u>not</u> change the document status. Only the admin can update the status.
             </p>
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
@@ -2231,9 +2231,9 @@ function initTrackingPage(){
             </div>
           </div>
           <button onclick="logPublicScanMovement('${d.id}')" class="btn-log-scan">
-             Log My Scan
+            📝 Log My Scan
           </button>
-          <div id="rm-success" class="scan-log-success"> Movement logged! The admin will see your scan in the document history.</div>
+          <div id="rm-success" class="scan-log-success">✅ Movement logged! The admin will see your scan in the document history.</div>
           <p id="rm-error" style="color:#f87171;font-size:12px;margin-top:8px;text-align:center;min-height:16px"></p>
 
           <div style="border-top:1px solid rgba(255,255,255,.07);margin:18px 0 14px;"></div>
@@ -2255,16 +2255,16 @@ function initTrackingPage(){
             </div>
           </div>
           <button onclick="generateMoveLink('${d.id}','${baseForApply}')" style="width:100%;padding:12px;background:rgba(59,130,246,.2);color:#93c5fd;border:1px solid rgba(59,130,246,.3);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">
-             Generate Status-Update Link for Admin
+            🔗 Generate Status-Update Link for Admin
           </button>
         </div>
       </div>`;
 
-    /*  Build vertical journey timeline  */
+    /* ── Build vertical journey timeline ── */
     const vtSteps=workflow;
     const vertTimelineHtml=isRejected
       ?`<div style="text-align:center;padding:16px 0">
-           <div style="font-size:40px;margin-bottom:10px"></div>
+           <div style="font-size:40px;margin-bottom:10px">⛔</div>
            <div style="font-size:14px;color:#f87171;font-weight:700">Document was Rejected</div>
            <p style="font-size:12px;color:rgba(255,255,255,.3);margin-top:6px;line-height:1.6">See the status history below for more details.</p>
          </div>`
@@ -2272,14 +2272,14 @@ function initTrackingPage(){
           const done=curIdx>i,current=curIdx===i;
           const dotBg=done?'#22c55e':current?sColor:'rgba(255,255,255,.05)';
           const dotBorder=done?'rgba(74,222,128,.7)':current?sColor:'rgba(255,255,255,.1)';
-          const dotText=done?'':current?'':(i+1);
+          const dotText=done?'✓':current?'●':(i+1);
           const dotTextColor=done||current?'#fff':'rgba(255,255,255,.22)';
           const dotGlow=current?`;box-shadow:0 0 16px ${sColor}55`:'';
           const labelColor=done?'rgba(74,222,128,.85)':current?'#e6edf3':'rgba(255,255,255,.28)';
           const labelWeight=current?'700':done?'600':'400';
           const sublabel=current
             ?`<div style="font-size:10px;font-weight:700;color:${sColor};letter-spacing:.4px;margin-top:3px;text-transform:uppercase">← Current Status</div>`
-            :done?`<div style="font-size:10px;color:rgba(74,222,128,.5);margin-top:3px"> Completed</div>`
+            :done?`<div style="font-size:10px;color:rgba(74,222,128,.5);margin-top:3px">✓ Completed</div>`
             :`<div style="font-size:10px;color:rgba(255,255,255,.18);margin-top:3px">Pending</div>`;
           const connector=i<vtSteps.length-1
             ?`<div style="width:2px;height:30px;background:${done?'rgba(74,222,128,.3)':'rgba(255,255,255,.07)'};margin:3px 0"></div>`:'';
@@ -2299,7 +2299,7 @@ function initTrackingPage(){
     const isLive = !!(docs.find(function(x){return x.id===d.id;}));
     const snapshotNotice = isLive ? '' : `
       <div style="margin-bottom:16px;padding:12px 16px;background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.25);border-radius:10px;display:flex;align-items:flex-start;gap:10px">
-        <span style="font-size:16px;flex-shrink:0"></span>
+        <span style="font-size:16px;flex-shrink:0">📸</span>
         <div>
           <p style="font-size:12px;color:rgba(245,158,11,.9);font-weight:600;margin-bottom:2px">Showing status at time of QR generation</p>
           <p style="font-size:11px;color:rgba(255,255,255,.4);line-height:1.6">For the latest status, ask the admin to share the updated QR code.</p>
@@ -2308,7 +2308,7 @@ function initTrackingPage(){
 
     document.getElementById('track-content-body').innerHTML=snapshotNotice+`
       <div class="track-card">
-        <div class="track-card-head"><h3> &nbsp;Document Details</h3></div>
+        <div class="track-card-head"><h3>📋 &nbsp;Document Details</h3></div>
         <div class="track-card-body">
           <div class="track-field">
             <span class="track-field-label">Document ID</span>
@@ -2334,23 +2334,23 @@ function initTrackingPage(){
         </div>
       </div>
       <div class="track-card">
-        <div class="track-card-head"><h3> &nbsp;Document Journey</h3></div>
+        <div class="track-card-head"><h3>🗺️ &nbsp;Document Journey</h3></div>
         <div class="track-card-body" style="padding:20px 24px">
           ${vertTimelineHtml}
         </div>
       </div>
       <div class="track-card">
-        <div class="track-card-head"><h3> &nbsp;Status History</h3></div>
+        <div class="track-card-head"><h3>🕐 &nbsp;Status History</h3></div>
         <div class="track-card-body"><div class="track-timeline">${histHtml}</div></div>
       </div>
       <div style="margin-top:20px;padding:18px 20px;background:rgba(0,0,0,.3);border:1px solid rgba(74,222,128,.15);border-radius:12px;text-align:center">
-        <p style="font-size:12px;color:rgba(255,255,255,.45);line-height:1.8"> Official CIT Document Routing Slip. For internal updates or file retrieval, authorized personnel must log into the Main Dashboard.</p>
+        <p style="font-size:12px;color:rgba(255,255,255,.45);line-height:1.8">🔒 Official CIT Document Routing Slip. For internal updates or file retrieval, authorized personnel must log into the Main Dashboard.</p>
         <p style="font-size:10px;color:rgba(255,255,255,.18);margin-top:8px;font-family:'DM Mono',monospace;letter-spacing:.3px">CIT Document Tracker · IDEA-128 Encryption · Group 6</p>
       </div>`;
 
   }catch(e){
     document.getElementById('track-content-hero').innerHTML=`
-      <div class="track-doc-badge" style="background:rgba(239,68,68,.12)"></div>
+      <div class="track-doc-badge" style="background:rgba(239,68,68,.12)">⚠️</div>
       <div class="track-doc-name">Invalid QR Code</div>
       <div class="track-doc-meta">Could not decrypt the QR payload</div>`;
     document.getElementById('track-content-body').innerHTML=`
@@ -2366,7 +2366,7 @@ function initTrackingPage(){
   return true;
 }
 
-/*  REPORT MOVE  */
+/* ══ REPORT MOVE ════════════════════════════════════════════ */
 function generateMoveLink(docId, baseUrl){
   const handler=(document.getElementById('rm-handler')||{}).value||'';
   const location=(document.getElementById('rm-location')||{}).value||'';
@@ -2391,28 +2391,28 @@ function generateMoveLink(docId, baseUrl){
   const body=document.getElementById('report-move-body');
   body.innerHTML=`
     <div style="text-align:center;padding:8px 0">
-      <div style="font-size:36px;margin-bottom:10px"></div>
+      <div style="font-size:36px;margin-bottom:10px">✅</div>
       <p style="font-size:15px;font-weight:700;color:#4ade80;margin-bottom:4px">Update Link Ready!</p>
-      <p style="font-size:13px;color:rgba(255,255,255,.5);margin-bottom:4px"> ${location.trim()} &nbsp;·&nbsp; ${status} &nbsp;·&nbsp;  ${handler.trim()}</p>
+      <p style="font-size:13px;color:rgba(255,255,255,.5);margin-bottom:4px">📍 ${location.trim()} &nbsp;·&nbsp; ${status} &nbsp;·&nbsp; 👤 ${handler.trim()}</p>
       ${note.trim()?`<p style="font-size:12px;color:rgba(255,255,255,.3);font-style:italic;margin-bottom:16px">"${note.trim()}"</p>`:'<div style="margin-bottom:16px"></div>'}
       <p style="font-size:13px;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:10px">Send this link to admin (WhatsApp, Messenger, email…):</p>
       <div style="background:rgba(0,0,0,.3);border:1px solid rgba(74,222,128,.15);border-radius:8px;padding:12px;margin-bottom:14px;word-break:break-all;font-family:'DM Mono',monospace;font-size:10px;color:rgba(74,222,128,.7);line-height:1.6;text-align:left">${applyUrl.slice(0,120)}${applyUrl.length>120?'…':''}</div>
       <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
         <button onclick="navigator.clipboard.writeText('${applyUrl.replace(/'/g,"\'")}').then(function(){alert('Link copied! Send it to your admin.');}).catch(function(){prompt('Copy this link:','${applyUrl.replace(/'/g,"\'")}');})"
           style="padding:10px 20px;background:#4ade80;color:#0d1117;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">
-           Copy Link
+          📋 Copy Link
         </button>
-        <a href="https://wa.me/?text=${encodeURIComponent(' Document update — please open this link to apply:\n'+applyUrl)}"
+        <a href="https://wa.me/?text=${encodeURIComponent('📋 Document update — please open this link to apply:\n'+applyUrl)}"
           target="_blank"
           style="padding:10px 20px;background:#25d366;color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">
-           Share via WhatsApp
+          💬 Share via WhatsApp
         </a>
       </div>
       <p style="font-size:11px;color:rgba(255,255,255,.25);margin-top:14px">Admin opens this link on their computer → the system updates automatically.</p>
     </div>`;
 }
 
-/*  MOVEMENT LOGS PAGE (Admin)  */
+/* ══ MOVEMENT LOGS PAGE (Admin) ══════════════════════════════ */
 function renderMovementLogs(){
   const term=(document.getElementById('movement-search')?.value||'').toLowerCase();
   let entries=[...movementLogs].reverse(); // newest first
@@ -2447,8 +2447,8 @@ function renderMovementLogs(){
       <td class="doc-id-cell">${m.documentId}</td>
       <td class="doc-name-cell">${docName}</td>
       <td style="font-size:13px;font-weight:500">${m.handledBy||'—'}</td>
-      <td><span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#16a34a"> ${m.location||'—'}</span></td>
-      <td><span style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:20px;font-size:11px;font-weight:700;color:#15803d"> ${m.action||'Scanned'}</span></td>
+      <td><span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#16a34a">📍 ${m.location||'—'}</span></td>
+      <td><span style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:20px;font-size:11px;font-weight:700;color:#15803d">📱 ${m.action||'Scanned'}</span></td>
     </tr>`;
   }).join('');
 }
@@ -2486,7 +2486,7 @@ function logPublicScanMovement(documentId){
   }catch(e){console.warn('Could not save movement log',e);}
   // Show success
   const btn=document.querySelector('.btn-log-scan');
-  if(btn){btn.disabled=true;btn.textContent=' Logged!';}
+  if(btn){btn.disabled=true;btn.textContent='✅ Logged!';}
   if(succEl){succEl.style.display='block';}
   if(errEl){errEl.style.display='none';}
 }
@@ -2496,7 +2496,7 @@ function openModal(id){document.getElementById(id).classList.add('open');}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
 document.querySelectorAll('.overlay').forEach(el=>el.addEventListener('click',e=>{if(e.target===el)el.classList.remove('open');}));
 
-/*  FILE VIEW & DOWNLOAD  */
+/* ══ FILE VIEW & DOWNLOAD ════════════════════════════════ */
 let _fileModalDocId=null;
 
 function openFileModal(id){
@@ -2529,7 +2529,7 @@ function triggerDownload(){
   toast('Download started!');
 }
 
-/*  TOAST  */
+/* ══ TOAST ══════════════════════════════════════════════════ */
 let toastTimer;
 function toast(msg){
   const el=document.getElementById('toast');
@@ -2538,7 +2538,7 @@ function toast(msg){
   toastTimer=setTimeout(()=>el.classList.remove('show'),2800);
 }
 
-/*  INIT  */
+/* ══ INIT ═══════════════════════════════════════════════════ */
 load();
 
 if(initTrackingPage()){
