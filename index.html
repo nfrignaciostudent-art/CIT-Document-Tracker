@@ -439,7 +439,7 @@
 <!-- Update Status -->
 <div class="overlay" id="update-modal">
   <div class="modal" style="width:460px">
-    <div class="modal-head"><h3>Update Document Status</h3><button class="modal-close" onclick="closeModal('update-modal')"></button></div>
+    <div class="modal-head"><h3>Update Document Status</h3><button class="modal-close" onclick="closeModal('update-modal')">&times;</button></div>
     <div class="modal-body">
       <div class="field"><label>Document ID</label><input type="text" id="upd-id" readonly style="background:#f8fafc;color:var(--muted)"></div>
       <div class="field"><label>Document Name</label><input type="text" id="upd-name" readonly style="background:#f8fafc;color:var(--muted)"></div>
@@ -492,7 +492,7 @@
         <h3> Log QR Scan Movement</h3>
         <p style="font-size:11px;color:rgba(255,255,255,.35);margin-top:2px">Record who handled this document and where</p>
       </div>
-      <button class="modal-close" onclick="closeModal('scan-log-modal')" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.1);color:rgba(255,255,255,.5)"></button>
+      <button class="modal-close" onclick="closeModal('scan-log-modal')" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.1);color:rgba(255,255,255,.5)">&times;</button>
     </div>
     <div class="modal-body" style="padding:22px">
       <div style="padding:10px 14px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;margin-bottom:18px">
@@ -534,7 +534,7 @@
 <!-- QR Modal -->
 <div class="overlay" id="qr-modal">
   <div class="modal" style="width:480px">
-    <div class="modal-head"><h3> Document QR Code</h3><button class="modal-close" onclick="closeModal('qr-modal')"></button></div>
+    <div class="modal-head"><h3> Document QR Code</h3><button class="modal-close" onclick="closeModal('qr-modal')">&times;</button></div>
     <div class="modal-body" style="text-align:center">
       <p id="qr-name" style="font-weight:600;font-size:15px;margin-bottom:2px"></p>
       <p id="qr-status" style="font-size:12px;color:var(--muted);margin-bottom:12px"></p>
@@ -566,7 +566,7 @@
           <p style="font-size:10px;color:rgba(255,255,255,.35);margin-top:1px">Live Document Status</p>
         </div>
       </div>
-      <button class="modal-close" onclick="closeModal('scan-result-modal')" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.1);color:rgba(255,255,255,.5)"></button>
+      <button class="modal-close" onclick="closeModal('scan-result-modal')" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.1);color:rgba(255,255,255,.5)">&times;</button>
     </div>
     <div class="modal-body" style="background:#0d1a10;padding:0;overflow-y:auto" id="scan-result-body"></div>
   </div>
@@ -575,7 +575,7 @@
 <!-- History Modal -->
 <div class="overlay" id="history-modal">
   <div class="modal">
-    <div class="modal-head"><h3>Document History</h3><button class="modal-close" onclick="closeModal('history-modal')"></button></div>
+    <div class="modal-head"><h3>Document History</h3><button class="modal-close" onclick="closeModal('history-modal')">&times;</button></div>
     <div class="modal-body">
       <p id="hist-name" style="font-weight:600;margin-bottom:4px;font-size:14px"></p>
       <p id="hist-id" style="font-size:12px;color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:16px"></p>
@@ -591,7 +591,7 @@
       <h3>Notifications</h3>
       <div style="display:flex;gap:8px;align-items:center">
         <button class="btn btn-sm btn-ghost" onclick="markAllRead()">Mark all read</button>
-        <button class="modal-close" onclick="closeModal('notif-modal')"></button>
+        <button class="modal-close" onclick="closeModal('notif-modal')">&times;</button>
       </div>
     </div>
     <div class="modal-body"><div class="notif-list" id="notif-list"></div></div>
@@ -606,7 +606,7 @@
         <h3 id="uv-title">User Documents</h3>
         <p id="uv-subtitle" style="font-size:12px;color:var(--muted);margin-top:1px"></p>
       </div>
-      <button class="modal-close" onclick="closeModal('user-vault-modal')"></button>
+      <button class="modal-close" onclick="closeModal('user-vault-modal')">&times;</button>
     </div>
     <div class="modal-body" style="padding:0">
       <div style="display:flex;border-bottom:1px solid var(--border);padding:0 22px;gap:0">
@@ -636,7 +636,7 @@
         <h3> &nbsp;Attached File</h3>
         <p id="file-modal-docname" style="font-size:12px;color:var(--muted);margin-top:2px"></p>
       </div>
-      <button class="modal-close" onclick="closeModal('file-modal')"></button>
+      <button class="modal-close" onclick="closeModal('file-modal')">&times;</button>
     </div>
     <div class="modal-body" style="text-align:center">
       <div id="file-modal-pdf" style="display:none">
