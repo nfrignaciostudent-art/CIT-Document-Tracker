@@ -148,8 +148,8 @@ Received --> Processing --> For Approval --> Approved --> Released
 
 ## Group Members
 
-> Nash Gutierrez
- Laurendeyn Aquino
+> Nash Gutierrez,
+Laurendeyn Aquino,
  Nhico Ignacio
 
 ---
