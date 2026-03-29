@@ -312,7 +312,7 @@ tbody tr:hover td{background:#f8fafc;}
 <div id="track-screen">
   <div class="track-hero" id="track-hero">
     <div class="track-logo">
-      <div class="track-logo-dot">📄</div>
+      <div class="track-logo-dot"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#0d1117" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
       <span>CIT DOCUMENT TRACKER</span>
     </div>
     <div id="track-content-hero"></div>
@@ -332,7 +332,9 @@ tbody tr:hover td{background:#f8fafc;}
 <!-- ════ AUTH SCREEN ════ -->
 <div id="auth-screen" class="auth-show">
   <div class="auth-card">
-    <div class="auth-badge">📄</div>
+    <div class="auth-badge">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0d1117" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+    </div>
     <h2>CIT Document Tracker</h2>
     <div class="auth-tabs">
       <button class="auth-tab active" onclick="switchAuthTab('login')">Sign In</button>
@@ -361,7 +363,7 @@ tbody tr:hover td{background:#f8fafc;}
 <!-- ENCRYPTION ANIMATION -->
 <div id="encrypt-overlay">
   <div class="encrypt-card">
-    <div class="encrypt-icon">🔐</div>
+    <div class="encrypt-icon"></div>
     <h3>Encrypting Document</h3>
     <div id="encrypt-step" class="encrypt-step">Initializing cipher…</div>
     <div class="encrypt-bar-wrap"><div class="encrypt-bar" id="encrypt-bar"></div></div>
@@ -374,7 +376,9 @@ tbody tr:hover td{background:#f8fafc;}
   <!-- Sidebar -->
   <div class="sidebar">
     <div class="sidebar-logo">
-      <div class="logo-mark">📄</div>
+      <div class="logo-mark">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0d1117" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      </div>
       <h1>CIT Doc Tracker</h1>
     </div>
     <div id="user-info-bar" class="user-info-bar"></div>
@@ -398,6 +402,9 @@ tbody tr:hover td{background:#f8fafc;}
     </button>
     <button class="nav-item admin-only" id="nav-actlogs" onclick="showPage('actlogs',this)" style="display:none">
       <span class="nav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></span>Activity Logs
+    </button>
+    <button class="nav-item admin-only" id="nav-mvlog" onclick="showPage('mvlog',this)" style="display:none">
+      <span class="nav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>Movement Log
     </button>
     <div class="nav-section-label">Tools</div>
     <button class="nav-item" id="nav-demo" onclick="showPage('demo',this)">
@@ -475,7 +482,23 @@ tbody tr:hover td{background:#f8fafc;}
             </div>
             <div class="field"><label>Expected Date (optional)</label><input type="date" id="new-due"></div>
           </div>
-          <button class="btn btn-primary" id="save-btn" onclick="addDocument()">🔐 &nbsp;Encrypt &amp; Save</button>
+
+          <!-- ── FILE ATTACHMENT ── -->
+          <div class="field" style="margin-bottom:16px">
+            <label>Attach File <span style="font-weight:400;color:var(--muted)">(PDF, JPG, PNG — max 2 MB, optional)</span></label>
+            <input type="file" id="fileUpload" accept=".pdf,image/jpeg,image/png"
+              style="width:100%;padding:8px 12px;border:1px dashed var(--border);border-radius:8px;
+                     font-family:var(--sans);font-size:13px;color:var(--text);background:#fafafa;cursor:pointer;outline:none;"
+              onchange="previewFile(this)">
+            <div id="file-preview" style="display:none;margin-top:8px;padding:9px 12px;
+              background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;
+              font-size:12px;color:#15803d;align-items:center;gap:8px;font-family:var(--mono)">
+              <span id="file-preview-name"></span>
+              <span id="file-preview-size" style="color:var(--muted)"></span>
+            </div>
+          </div>
+
+          <button class="btn btn-primary" id="save-btn" onclick="addDocument()">Encrypt &amp; Save</button>
         </div>
       </div>
     </div>
@@ -490,7 +513,7 @@ tbody tr:hover td{background:#f8fafc;}
             <select id="vault-user-filter" style="padding:7px 10px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);outline:none;display:none" onchange="renderVault()">
               <option value="">All Users</option>
             </select>
-            <input class="search-input" id="search-input" placeholder="🔍  Search…" oninput="renderVault()">
+            <input class="search-input" id="search-input" placeholder="  Search…" oninput="renderVault()">
           </div>
         </div>
         <div style="overflow-x:auto">
@@ -576,7 +599,7 @@ tbody tr:hover td{background:#f8fafc;}
           <div class="field" style="margin-bottom:14px"><label>New Password</label><input type="password" id="new-pass" placeholder="Min. 4 characters"></div>
           <div class="field" style="margin-bottom:16px"><label>Confirm New Password</label><input type="password" id="conf-pass" placeholder="Repeat new password"></div>
           <button class="btn btn-yellow" onclick="changePassword()">Update Password</button>
-          <p style="font-size:12px;color:var(--muted);margin-top:10px">⚠️ You will be logged out after changing your password.</p>
+          <p style="font-size:12px;color:var(--muted);margin-top:10px">! You will be logged out after changing your password.</p>
         </div>
       </div>
       <div class="card" style="max-width:440px;margin-top:16px" id="admin-settings-card">
@@ -592,16 +615,41 @@ tbody tr:hover td{background:#f8fafc;}
       </div>
     </div>
 
+    <!-- MOVEMENT LOG (Admin) -->
+    <div class="page" id="page-mvlog">
+      <div class="page-header">
+        <h2>Movement Log</h2>
+        <p>All QR scan events across all documents — movement tracking only, no status changes</p>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <div><h3>Scan Movement Entries</h3><p>Every QR scan creates a new log entry — no overwriting</p></div>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+            <select id="mvlog-doc-filter" style="padding:7px 10px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);outline:none;" onchange="renderMovementLog()">
+              <option value="">All Documents</option>
+            </select>
+            <button class="btn btn-sm btn-ghost" onclick="clearMovementLog()">Clear All</button>
+          </div>
+        </div>
+        <div class="card-body" id="mvlog-body">
+          <p style="font-size:13px;color:var(--muted)">No movement entries yet.</p>
+        </div>
+      </div>
+    </div>
+
   </div><!-- /main -->
 </div><!-- /app -->
 
 <!-- MODALS -->
 
-<!-- Update Status -->
+<!-- Update Status (Admin Only) -->
 <div class="overlay" id="update-modal">
   <div class="modal">
-    <div class="modal-head"><h3>Update Document Status</h3><button class="modal-close" onclick="closeModal('update-modal')">✕</button></div>
+    <div class="modal-head"><h3>Update Document Status</h3><button class="modal-close" onclick="closeModal('update-modal')">&#x2715;</button></div>
     <div class="modal-body">
+      <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:12px;color:#92400e;font-weight:500;">
+        Admin action — status updates are logged with your credentials.
+      </div>
       <div class="field"><label>Document ID</label><input type="text" id="upd-id" readonly style="background:#f8fafc;color:var(--muted)"></div>
       <div class="field"><label>Document Name</label><input type="text" id="upd-name" readonly style="background:#f8fafc;color:var(--muted)"></div>
       <div class="field"><label>New Status</label>
@@ -611,7 +659,8 @@ tbody tr:hover td{background:#f8fafc;}
           <option>Released</option><option>Rejected</option>
         </select>
       </div>
-      <div class="field"><label>Admin Note (optional)</label><input type="text" id="upd-note" placeholder="Reason for status change…"></div>
+      <div class="field"><label>Location (optional)</label><input type="text" id="upd-location" placeholder="e.g. Registrar's Office"></div>
+      <div class="field"><label>Note (optional)</label><input type="text" id="upd-note" placeholder="Reason for status change…"></div>
       <div style="margin-top:16px;display:flex;gap:8px">
         <button class="btn btn-primary" style="flex:1;justify-content:center" onclick="applyUpdate()">Save Changes</button>
         <button class="btn btn-ghost" onclick="closeModal('update-modal')">Cancel</button>
@@ -622,21 +671,26 @@ tbody tr:hover td{background:#f8fafc;}
 
 <!-- QR Modal -->
 <div class="overlay" id="qr-modal">
-  <div class="modal" style="width:460px">
-    <div class="modal-head"><h3>🔐 Document QR Code</h3><button class="modal-close" onclick="closeModal('qr-modal')">✕</button></div>
+  <div class="modal" style="width:400px">
+    <div class="modal-head"><h3>Document QR Code</h3><button class="modal-close" onclick="closeModal('qr-modal')">&#x2715;</button></div>
     <div class="modal-body" style="text-align:center">
       <p id="qr-name" style="font-weight:600;font-size:15px;margin-bottom:2px"></p>
-      <p id="qr-status" style="font-size:12px;color:var(--muted);margin-bottom:14px"></p>
-      <div id="qr-wrap" style="display:inline-block;padding:12px;background:#fff;border-radius:10px;border:1px solid var(--border);margin-bottom:12px"></div>
-      <p style="font-size:12px;color:var(--muted);margin-bottom:4px">Point any phone camera or QR scanner at this code</p>
-      <p style="font-size:10px;color:#94a3b8;font-family:'DM Mono',monospace;margin-bottom:16px" id="qr-enc-hint"></p>
-      <!-- Divider -->
-      <div style="border-top:1px solid var(--border);margin:4px 0 14px;"></div>
-      <p style="font-size:11px;color:var(--muted);margin-bottom:10px;font-weight:500">Testing in browser?</p>
+      <p id="qr-status" style="font-size:12px;color:var(--muted);margin-bottom:16px"></p>
+
+      <div id="qr-wrap" style="display:inline-block;padding:14px;background:#fff;border-radius:10px;border:1px solid var(--border);margin-bottom:12px"></div>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:2px">Point any phone camera or QR scanner at this code</p>
+      <p style="font-size:10px;color:#94a3b8;font-family:'DM Mono',monospace;margin-bottom:14px" id="qr-enc-hint"></p>
+
+      <!-- hidden inputs kept for JS compatibility -->
+      <input type="hidden" id="qr-base-url">
+      <div id="qr-url-preview" style="display:none"><p id="qr-url-text"></p></div>
+
+      <div style="border-top:1px solid var(--border);margin:0 0 14px;"></div>
+      <p style="font-size:11px;color:var(--muted);margin-bottom:8px;font-weight:500">Testing in browser?</p>
       <button onclick="simulateScan()" style="display:inline-flex;align-items:center;gap:7px;padding:9px 20px;background:#1c2b20;color:#4ade80;border:1px solid rgba(74,222,128,.25);border-radius:8px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;">
-        📱 Simulate QR Scan
+        Simulate Scan
       </button>
-      <p style="font-size:10px;color:#b0bec5;margin-top:10px">QR payload is IDEA-encrypted — raw document ID is never exposed</p>
+      <p style="font-size:10px;color:#b0bec5;margin-top:8px">QR payload is IDEA-encrypted — raw document ID is never exposed</p>
     </div>
   </div>
 </div>
@@ -646,13 +700,44 @@ tbody tr:hover td{background:#f8fafc;}
   <div class="modal" style="width:480px;max-height:90vh">
     <div class="modal-head" style="background:#0d1a10;border-bottom:1px solid rgba(74,222,128,.15)">
       <div style="display:flex;align-items:center;gap:10px">
-        <div style="width:28px;height:28px;background:#4ade80;border-radius:7px;display:grid;place-items:center;font-size:13px;flex-shrink:0">📄</div>
+        <div style="width:28px;height:28px;background:#4ade80;border-radius:7px;display:grid;place-items:center;flex-shrink:0;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0d1117" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
         <div>
           <h3 style="color:#e6edf3;font-size:14px">CIT Document Tracker</h3>
           <p style="font-size:10px;color:rgba(255,255,255,.35);margin-top:1px">Live Document Status</p>
         </div>
       </div>
-      <button class="modal-close" onclick="closeModal('scan-result-modal')" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.1);color:rgba(255,255,255,.5)">✕</button>
+      <button class="modal-close" onclick="closeModal('scan-result-modal')" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.1);color:rgba(255,255,255,.5)">&#x2715;</button>
+    </div>
+    <!-- Movement Log Form (shown inside scan result) -->
+    <div id="scan-mvlog-form" style="background:#0f1f14;border-bottom:1px solid rgba(74,222,128,.15);padding:16px 18px;">
+      <div style="font-size:10px;font-weight:700;color:rgba(74,222,128,.6);letter-spacing:.8px;text-transform:uppercase;margin-bottom:10px">Log Movement</div>
+      <div style="display:flex;gap:8px;margin-bottom:8px;">
+        <div style="flex:1">
+          <label style="font-size:10px;font-weight:600;color:rgba(255,255,255,.3);letter-spacing:.4px;text-transform:uppercase;display:block;margin-bottom:4px">Handled By</label>
+          <input type="text" id="mvlog-handler" placeholder="Your name"
+            style="width:100%;padding:8px 10px;border:1px solid rgba(255,255,255,.12);border-radius:6px;font-family:var(--sans);font-size:12px;color:#e6edf3;background:#161b22;outline:none;">
+        </div>
+        <div style="flex:1">
+          <label style="font-size:10px;font-weight:600;color:rgba(255,255,255,.3);letter-spacing:.4px;text-transform:uppercase;display:block;margin-bottom:4px">Location</label>
+          <select id="mvlog-location"
+            style="width:100%;padding:8px 10px;border:1px solid rgba(255,255,255,.12);border-radius:6px;font-family:var(--sans);font-size:12px;color:#e6edf3;background:#161b22;outline:none;">
+            <option value="">Select location…</option>
+            <option>Registrar's Office</option>
+            <option>Administrative Office</option>
+            <option>Accounting Office</option>
+            <option>Laboratory Office</option>
+            <option>Manager's Office</option>
+            <option>Document Control Office</option>
+            <option>Dean's Office</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <button onclick="submitMovementLog()" style="flex:1;padding:8px 12px;background:rgba(74,222,128,.15);border:1px solid rgba(74,222,128,.3);border-radius:6px;color:#4ade80;font-family:var(--sans);font-size:12px;font-weight:600;cursor:pointer;">Log Movement</button>
+        <div id="mvlog-status" style="font-size:11px;color:rgba(74,222,128,.7);display:none;">Movement logged.</div>
+      </div>
+      <p style="font-size:10px;color:rgba(255,255,255,.2);margin-top:8px;">Scanning this QR logs movement only — it does not change document status.</p>
     </div>
     <div class="modal-body" style="background:#0d1a10;padding:0;overflow-y:auto" id="scan-result-body"></div>
   </div>
@@ -660,8 +745,14 @@ tbody tr:hover td{background:#f8fafc;}
 
 <!-- History Modal -->
 <div class="overlay" id="history-modal">
-  <div class="modal">
-    <div class="modal-head"><h3>Document History</h3><button class="modal-close" onclick="closeModal('history-modal')">✕</button></div>
+  <div class="modal" style="width:480px">
+    <div class="modal-head">
+      <div>
+        <h3>Document Activity Log</h3>
+        <p style="font-size:11px;color:var(--muted);margin-top:2px">Scan movements and status updates — chronological</p>
+      </div>
+      <button class="modal-close" onclick="closeModal('history-modal')">&#x2715;</button>
+    </div>
     <div class="modal-body">
       <p id="hist-name" style="font-weight:600;margin-bottom:4px;font-size:14px"></p>
       <p id="hist-id" style="font-size:12px;color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:16px"></p>
@@ -677,7 +768,7 @@ tbody tr:hover td{background:#f8fafc;}
       <h3>Notifications</h3>
       <div style="display:flex;gap:8px;align-items:center">
         <button class="btn btn-sm btn-ghost" onclick="markAllRead()">Mark all read</button>
-        <button class="modal-close" onclick="closeModal('notif-modal')">✕</button>
+        <button class="modal-close" onclick="closeModal('notif-modal')"></button>
       </div>
     </div>
     <div class="modal-body"><div class="notif-list" id="notif-list"></div></div>
@@ -692,7 +783,7 @@ tbody tr:hover td{background:#f8fafc;}
         <h3 id="uv-title">User Documents</h3>
         <p id="uv-subtitle" style="font-size:12px;color:var(--muted);margin-top:1px"></p>
       </div>
-      <button class="modal-close" onclick="closeModal('user-vault-modal')">✕</button>
+      <button class="modal-close" onclick="closeModal('user-vault-modal')"></button>
     </div>
     <div class="modal-body" style="padding:0">
       <!-- Tabs -->
@@ -710,6 +801,37 @@ tbody tr:hover td{background:#f8fafc;}
       </div>
       <div id="uv-logs-panel" style="display:none;padding:16px 22px">
         <div class="log-table" id="uv-logs-body"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- View / Download File Modal -->
+<div class="overlay" id="file-modal">
+  <div class="modal" style="width:540px">
+    <div class="modal-head">
+      <div>
+        <h3>Attached File</h3>
+        <p id="file-modal-docname" style="font-size:12px;color:var(--muted);margin-top:2px"></p>
+      </div>
+      <button class="modal-close" onclick="closeModal('file-modal')"></button>
+    </div>
+    <div class="modal-body" style="text-align:center">
+      <div id="file-modal-pdf" style="display:none">
+        <iframe id="file-modal-iframe"
+          style="width:100%;height:400px;border:1px solid var(--border);border-radius:8px"
+          title="Document Preview"></iframe>
+      </div>
+      <div id="file-modal-img" style="display:none">
+        <img id="file-modal-image" alt="Document preview"
+          style="max-width:100%;max-height:400px;border-radius:8px;border:1px solid var(--border)">
+      </div>
+      <div id="file-modal-fallback" style="display:none;padding:40px 0;color:var(--muted);font-size:13px">
+        Preview not available for this file type.
+      </div>
+      <div style="margin-top:16px;display:flex;gap:8px;justify-content:center">
+        <button class="btn btn-primary" onclick="triggerDownload()">Download File</button>
+        <button class="btn btn-ghost"   onclick="closeModal('file-modal')">Close</button>
       </div>
     </div>
   </div>
@@ -784,6 +906,7 @@ let accounts      = [];  // [{id,username,name,password,role,color,created}]
 let docs          = [];  // [{id,name,type,by,purpose,date,status,enc,ownerId,ownerName,priority,due,history}]
 let notifications = {};  // {userId: [{id,msg,date,read,documentId}]}
 let activityLogs  = {};  // {userId: [{msg,date,color}]}
+let movementLogs  = {};  // {docId: [{type:'scan',handledBy,location,action,timestamp}]}
 let currentUser   = null;
 let updateDocId   = null;
 let _uvCurrentUid = null;
@@ -809,12 +932,14 @@ function save(){
   try{localStorage.setItem('cit_docs2',JSON.stringify(docs));}catch(e){}
   try{localStorage.setItem('cit_notifs',JSON.stringify(notifications));}catch(e){}
   try{localStorage.setItem('cit_actlogs',JSON.stringify(activityLogs));}catch(e){}
+  try{localStorage.setItem('cit_mvlogs',JSON.stringify(movementLogs));}catch(e){}
 }
 function load(){
   try{const s=localStorage.getItem('cit_accounts');if(s)accounts=JSON.parse(s);}catch(e){}
   try{const s=localStorage.getItem('cit_docs2');if(s)docs=JSON.parse(s);}catch(e){}
   try{const s=localStorage.getItem('cit_notifs');if(s)notifications=JSON.parse(s);}catch(e){}
   try{const s=localStorage.getItem('cit_actlogs');if(s)activityLogs=JSON.parse(s);}catch(e){}
+  try{const s=localStorage.getItem('cit_mvlogs');if(s)movementLogs=JSON.parse(s);}catch(e){}
 }
 
 /* ══ ACTIVITY LOGGING — FIX ══════════════════════════════════
@@ -907,6 +1032,7 @@ function setupSidebar(){
     </div>`;
   document.getElementById('nav-users').style.display   = isAdmin?'':'none';
   document.getElementById('nav-actlogs').style.display = isAdmin?'':'none';
+  document.getElementById('nav-mvlog').style.display   = isAdmin?'':'none';
   const adminCard=document.getElementById('admin-settings-card');
   if(adminCard) adminCard.style.display=isAdmin?'':'none';
 }
@@ -920,6 +1046,7 @@ function showPage(id,btn){
   if(id==='vault')    renderVault();
   if(id==='users')    renderUsers();
   if(id==='actlogs')  renderActivityLogs();
+  if(id==='mvlog')    renderMovementLog();
 }
 
 /* ══ RENDER ALL ═════════════════════════════════════════════ */
@@ -988,6 +1115,9 @@ function dashActions(d){
   const isAdmin=currentUser.role==='admin';
   const isOwner=d.ownerId===currentUser.id;
   let btns='';
+  if(d.fileData){
+    btns+=`<button class="btn btn-sm" style="background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0" onclick="openFileModal('${d.id}')" title="View / Download attached file">View File</button>`;
+  }
   if(isAdmin){
     btns+=`<button class="btn btn-sm btn-blue" onclick="openUpdate('${d.id}')">Update</button>`;
     btns+=`<button class="btn btn-sm btn-purple" onclick="openQR('${d.id}')">QR</button>`;
@@ -1023,7 +1153,7 @@ function renderVault(){
   if(!rows.length){tb.innerHTML=`<tr><td colspan="8"><div class="empty-msg">No documents found.</div></td></tr>`;return;}
   tb.innerHTML=rows.map(d=>`<tr>
     <td class="doc-id-cell">${d.id}</td>
-    <td class="doc-name-cell">${d.name}${isAdmin?`<br><span style="font-size:11px;color:var(--muted);font-weight:400">👤 ${d.ownerName}</span>`:''}</td>
+    <td class="doc-name-cell">${d.name}${isAdmin?`<br><span style="font-size:11px;color:var(--muted);font-weight:400"> ${d.ownerName}</span>`:''}</td>
     <td style="font-size:13px">${d.by}</td>
     <td class="enc-cell" title="${d.enc}">${d.enc.slice(0,14)}…</td>
     <td class="dec-cell">${IDEA.decrypt(d.enc,KEY)}</td>
@@ -1166,61 +1296,110 @@ function clearActivityLogs(){
 }
 
 /* ══ ADD DOCUMENT ═══════════════════════════════════════════ */
-function addDocument(){
-  const name=document.getElementById('new-name').value.trim();
-  const type=document.getElementById('new-type').value;
-  const by=document.getElementById('new-by').value.trim();
-  const purpose=document.getElementById('new-purpose').value.trim();
-  const priority=document.getElementById('new-priority').value||'Normal';
-  const due=document.getElementById('new-due').value||null;
-  if(!name||!type||!by||!purpose){toast('Please fill in all required fields.');return;}
-  const btn=document.getElementById('save-btn');
-  btn.disabled=true;
-  const overlay=document.getElementById('encrypt-overlay');
-  const bar=document.getElementById('encrypt-bar');
-  const step=document.getElementById('encrypt-step');
-  const sub=document.getElementById('encrypt-substep');
-  overlay.classList.add('show');
-  const steps=[
-    [0,'Initializing 128-bit key…','Loading key: Group6CITKey2024'],
-    [18,'Expanding 52 subkeys…','Rotating 128-bit buffer by 25 bits…'],
-    [40,'Applying 8 cipher rounds…','MUL mod 65537 · ADD mod 65536 · XOR'],
-    [65,'Output transformation…','Final multiply & add operations'],
-    [85,'Applying PKCS#7 padding…','Block-aligning plaintext'],
-    [95,'Finalizing ciphertext…','Converting to HEX representation'],
-    [100,'✅ Encryption complete!','Document secured & ready to save'],
-  ];
-  let i=0;
-  function nextStep(){
-    if(i>=steps.length){finishSave(name,type,by,purpose,priority,due,overlay,btn);return;}
-    const[pct,msg,s]=steps[i++];
-    bar.style.width=pct+'%';step.textContent=msg;sub.textContent=s;
-    setTimeout(nextStep,i===steps.length?400:320);
+function previewFile(input){
+  const preview = document.getElementById('file-preview');
+  const nameEl  = document.getElementById('file-preview-name');
+  const sizeEl  = document.getElementById('file-preview-size');
+  if(input.files && input.files[0]){
+    const f = input.files[0];
+    if(f.size > 2 * 1024 * 1024){
+      input.value = '';
+      preview.style.display = 'none';
+      toast('! File too large. Maximum size is 2 MB.');
+      return;
+    }
+    nameEl.textContent = f.name;
+    sizeEl.textContent = '(' + (f.size / 1024).toFixed(1) + ' KB)';
+    preview.style.display = 'flex';
+  } else {
+    preview.style.display = 'none';
   }
-  setTimeout(nextStep,50);
 }
 
-function finishSave(name,type,by,purpose,priority,due,overlay,btn){
-  const enc=IDEA.encrypt(name,KEY);
-  const doc={
-    id:genId(),name,type,by,purpose,date:nowStr(),status:'Received',enc,
-    ownerId:currentUser.id,ownerName:currentUser.username,
-    priority,due:due||null,
-    history:[{status:'Received',date:nowStr(),note:'Document submitted & encrypted',by:currentUser.username}]
+function addDocument(){
+  const name     = document.getElementById('new-name').value.trim();
+  const type     = document.getElementById('new-type').value;
+  const by       = document.getElementById('new-by').value.trim();
+  const purpose  = document.getElementById('new-purpose').value.trim();
+  const priority = document.getElementById('new-priority').value || 'Normal';
+  const due      = document.getElementById('new-due').value || null;
+
+  if(!name||!type||!by||!purpose){ toast('Please fill in all required fields.'); return; }
+
+  const fileInput = document.getElementById('fileUpload');
+  const file      = fileInput.files[0] || null;
+
+  if(file && file.size > 2 * 1024 * 1024){
+    toast('! File too large. Maximum allowed size is 2 MB.');
+    return;
+  }
+
+  const btn     = document.getElementById('save-btn');
+  const overlay = document.getElementById('encrypt-overlay');
+  const bar     = document.getElementById('encrypt-bar');
+  const step    = document.getElementById('encrypt-step');
+  const sub     = document.getElementById('encrypt-substep');
+
+  btn.disabled = true;
+  overlay.classList.add('show');
+
+  const steps = [
+    [0,  'Initializing 128-bit key…',    'Loading key: Group6CITKey2024'],
+    [18, 'Expanding 52 subkeys…',        'Rotating 128-bit buffer by 25 bits…'],
+    [40, 'Applying 8 cipher rounds…',    'MUL mod 65537 · ADD mod 65536 · XOR'],
+    [65, 'Output transformation…',       'Final multiply & add operations'],
+    [85, 'Applying PKCS#7 padding…',     'Block-aligning plaintext'],
+    [95, 'Finalizing ciphertext…',       'Converting to HEX representation'],
+    [100,' Encryption complete!',       'Document secured & ready to save'],
+  ];
+
+  function startAnimation(fileData, fileExt){
+    let i = 0;
+    function nextStep(){
+      if(i >= steps.length){ finishSave(name,type,by,purpose,priority,due,overlay,btn,fileData,fileExt); return; }
+      const [pct,msg,s] = steps[i++];
+      bar.style.width = pct + '%'; step.textContent = msg; sub.textContent = s;
+      setTimeout(nextStep, i === steps.length ? 400 : 320);
+    }
+    setTimeout(nextStep, 50);
+  }
+
+  if(file){
+    const reader = new FileReader();
+    reader.onload  = e => startAnimation(e.target.result, '.' + file.name.split('.').pop().toLowerCase());
+    reader.onerror = () => { toast('Could not read file.'); btn.disabled = false; overlay.classList.remove('show'); };
+    reader.readAsDataURL(file);
+  } else {
+    startAnimation(null, null);
+  }
+}
+
+function finishSave(name,type,by,purpose,priority,due,overlay,btn,fileData,fileExt){
+  const enc = IDEA.encrypt(name, KEY);
+  const doc = {
+    id:genId(), name, type, by, purpose,
+    date:nowStr(), status:'Received', enc,
+    ownerId:currentUser.id, ownerName:currentUser.username,
+    priority, due:due||null,
+    history:[{status:'Received',date:nowStr(),note:'Document submitted & encrypted',by:currentUser.username}],
+    fileData: fileData || null,
+    fileExt:  fileExt  || null,
   };
   docs.push(doc);
-  logActivity(currentUser.id,`Submitted document "${name}"`, '#4ade80');
-  save();renderAll();
+  logActivity(currentUser.id, `Submitted document "${name}"${fileData?' (with attachment)':''}`, '#4ade80');
+  save(); renderAll();
   setTimeout(()=>{
     overlay.classList.remove('show');
-    document.getElementById('encrypt-bar').style.width='0%';
-    btn.disabled=false;
-    ['new-name','new-type','new-by','new-purpose'].forEach(id=>document.getElementById(id).value='');
-    document.getElementById('new-priority').value='Normal';
-    document.getElementById('new-due').value='';
-    toast('Document encrypted and saved! Status: Received');
-    showPage('vault',document.getElementById('nav-vault'));
-  },600);
+    document.getElementById('encrypt-bar').style.width = '0%';
+    btn.disabled = false;
+    ['new-name','new-type','new-by','new-purpose'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('new-priority').value = 'Normal';
+    document.getElementById('new-due').value = '';
+    document.getElementById('fileUpload').value = '';
+    document.getElementById('file-preview').style.display = 'none';
+    toast('Document encrypted and saved!' + (fileData ? '  File attached.' : ''));
+    showPage('vault', document.getElementById('nav-vault'));
+  }, 600);
 }
 
 /* ══ DELETE DOC ═════════════════════════════════════════════ */
@@ -1235,24 +1414,46 @@ function deleteDoc(id){
 /* ══ UPDATE STATUS ══════════════════════════════════════════ */
 function openUpdate(id){
   const d=docs.find(d=>d.id===id);if(!d)return;
+  if(currentUser && currentUser.role!=='admin'){ toast('Only Admin can update document status.'); return; }
   updateDocId=id;
   document.getElementById('upd-id').value=id;
   document.getElementById('upd-name').value=d.name;
   document.getElementById('upd-status').value=d.status;
   document.getElementById('upd-note').value='';
+  document.getElementById('upd-location').value='';
   openModal('update-modal');
 }
 function applyUpdate(){
+  if(currentUser.role!=='admin'){ toast('Only Admin can update document status.'); return; }
   const d=docs.find(d=>d.id===updateDocId);if(!d)return;
   const newStatus=document.getElementById('upd-status').value;
   const note=document.getElementById('upd-note').value.trim();
+  const loc=document.getElementById('upd-location').value.trim();
   d.status=newStatus;
   if(!d.history)d.history=[];
-  d.history.push({status:newStatus,date:nowStr(),note:note||'',by:currentUser.username});
-  // FIX: Notification includes documentId for redirect
+  d.history.push({
+    type:'status',
+    status:newStatus,
+    date:nowStr(),
+    note:note||'',
+    by:currentUser.username,
+    location:loc||'',
+    timestamp:new Date().toISOString()
+  });
+  // Movement log entry for the status update
+  if(!movementLogs[d.id]) movementLogs[d.id]=[];
+  movementLogs[d.id].push({
+    type:'status',
+    documentId:d.id,
+    handledBy:currentUser.username,
+    status:newStatus,
+    action:'Status Update',
+    location:loc||'',
+    note:note||'',
+    timestamp:new Date().toISOString()
+  });
   addNotification(d.ownerId,`Your document "${d.name}" status changed to <strong>${newStatus}</strong>${note?` — ${note}`:''}`,d.id);
-  logActivity(currentUser.id,`Updated "${d.name}" → ${newStatus}`, statusColor(newStatus));
-  // Also log for doc owner if different
+  logActivity(currentUser.id,`Updated "${d.name}" to ${newStatus}`, statusColor(newStatus));
   if(d.ownerId!==currentUser.id){
     logActivity(d.ownerId,`Document "${d.name}" status changed to ${newStatus}`, statusColor(newStatus));
   }
@@ -1267,61 +1468,88 @@ function docOffice(type){
 
 let _currentQRDocId = '';
 
+function getSavedBaseUrl(){
+  return localStorage.getItem('cit_qr_base_url') || '';
+}
+
+function setCurrentOriginAsBase(){
+  const origin = window.location.origin + window.location.pathname;
+  document.getElementById('qr-base-url').value = origin;
+  localStorage.setItem('cit_qr_base_url', origin);
+  regenerateQR();
+}
+
+let _qrRebuildTimer = null;
+
+function regenerateQR(){
+  if(!_currentQRDocId) return;
+  const baseUrl = document.getElementById('qr-base-url').value.trim();
+  localStorage.setItem('cit_qr_base_url', baseUrl);
+  clearTimeout(_qrRebuildTimer);
+  _qrRebuildTimer = setTimeout(function(){ buildQR(_currentQRDocId, baseUrl); }, 400);
+}
+
+function buildQR(id, baseUrl){
+  const d = docs.find(function(d){ return d.id===id; }); if(!d) return;
+  const encId = IDEA.encrypt(d.id, KEY);
+  const wrap  = document.getElementById('qr-wrap');
+
+  let payload;
+  if(baseUrl){
+    const cleanBase = baseUrl.replace(/\/+$/, '').split('?')[0];
+    payload = cleanBase + '?track=' + encId;
+    document.getElementById('qr-enc-hint').textContent = payload.length > 60 ? payload.slice(0,57) + '…' : payload;
+  } else {
+    // Running locally / in iframe — encode the encrypted ID only
+    payload = encId;
+    document.getElementById('qr-enc-hint').textContent = 'Deploy to a web server to generate a scannable URL. Use Simulate Scan to test locally.';
+  }
+
+  wrap.innerHTML = '';
+  const target = document.createElement('div');
+  wrap.appendChild(target);
+  new QRCode(target, {
+    text: payload,
+    width: 200,
+    height: 200,
+    correctLevel: QRCode.CorrectLevel.M
+  });
+}
+
 function openQR(id){
-  const d = docs.find(d=>d.id===id); if(!d) return;
+  const d = docs.find(function(d){ return d.id===id; }); if(!d) return;
   _currentQRDocId = id;
 
-  const encId   = IDEA.encrypt(d.id, KEY);
-  const encName = d.enc;
-  const relEntry = [...(d.history||[])].reverse().find(h=>h.status==='Released');
-  const histLines = (d.history||[]).map(h=>`  [${h.status}] ${h.date} by ${h.by}${h.note?' - '+h.note:''}`).join('\n');
-
-  // Plain-text payload — scannable by any phone camera/QR app
-  const payload = [
-    '=== CIT DOCUMENT TRACKER ===',
-    'Group 6 | IDEA Encryption',
-    '',
-    'DOCUMENT ID : ' + d.id,
-    'NAME        : ' + d.name,
-    'TYPE        : ' + d.type,
-    'OFFICE      : ' + docOffice(d.type),
-    'SUBMITTED BY: ' + d.by,
-    'PURPOSE     : ' + d.purpose,
-    'DATE FILED  : ' + d.date,
-    'PRIORITY    : ' + (d.priority||'Normal'),
-    'STATUS      : ' + d.status,
-    'RELEASED    : ' + (relEntry ? relEntry.date : 'Not yet released'),
-    '',
-    '--- IDEA ENCRYPTED ---',
-    'ENC NAME : ' + encName,
-    'ENC ID   : ' + encId,
-    '',
-    '--- HISTORY ---',
-    histLines || '  (none)',
-    '',
-    '============================',
-  ].join('\n');
-
   document.getElementById('qr-name').textContent   = d.name;
-  document.getElementById('qr-status').textContent = 'Status: ' + d.status + '  ·  ID: ' + d.id;
-  document.getElementById('qr-enc-hint').textContent = 'IDEA Enc ID: ' + encId.slice(0,24) + '…';
-  document.getElementById('qr-wrap').innerHTML = '';
+  document.getElementById('qr-status').textContent = 'Status: ' + d.status + '  \u00b7  ID: ' + d.id;
+  document.getElementById('qr-wrap').innerHTML     = '';
+
   openModal('qr-modal');
 
-  setTimeout(()=>{
-    new QRCode(document.getElementById('qr-wrap'), {
-      text: payload,
-      width: 200, height: 200,
-      correctLevel: QRCode.CorrectLevel.L  // L = highest capacity, best for longer text
-    });
-  }, 80);
+  // Detect usable base URL — falls back to empty string if running locally or in iframe
+  const href = window.location.href.split('?')[0];
+  const badOrigins = ['null', 'about:', 'blob:', 'srcdoc'];
+  const isBad = badOrigins.some(b => href.startsWith(b) || window.location.origin === 'null');
+  const autoBase = isBad ? '' : href;
+
+  setTimeout(function(){ buildQR(id, autoBase); }, 150);
 }
+
+let _scanDocId = '';
 
 function simulateScan(){
   if(!_currentQRDocId){ toast('Open a QR code first.'); return; }
   const d = docs.find(d=>d.id===_currentQRDocId);
   if(!d){ toast('Document not found.'); return; }
+  _scanDocId = d.id;
   closeModal('qr-modal');
+  // Reset movement form
+  const handlerEl = document.getElementById('mvlog-handler');
+  const locationEl = document.getElementById('mvlog-location');
+  const statusEl = document.getElementById('mvlog-status');
+  if(handlerEl) handlerEl.value = currentUser ? (currentUser.name||currentUser.username) : '';
+  if(locationEl) locationEl.value = '';
+  if(statusEl) statusEl.style.display = 'none';
   renderScanResult(d);
   openModal('scan-result-modal');
 }
@@ -1335,13 +1563,13 @@ function renderScanResult(d){
   const isRejected = d.status==='Rejected';
 
   const wfDots = isRejected
-    ? `<div style="text-align:center;padding:16px 0;color:#f87171;font-size:13px;font-weight:600">⛔ Document Rejected</div>`
+    ? `<div style="text-align:center;padding:16px 0;color:#f87171;font-size:13px;font-weight:600">Document Rejected</div>`
     : workflow.map((s,i)=>{
         const done=curIdx>i, curr=curIdx===i;
         const bg = curr ? sc : done ? '#22c55e22' : 'rgba(255,255,255,.04)';
         const bc = curr ? sc : done ? '#22c55e55' : 'rgba(255,255,255,.08)';
         const tc = curr ? '#fff' : done ? '#22c55e' : 'rgba(255,255,255,.2)';
-        const icon = done ? '✓' : curr ? '●' : i+1;
+        const icon = done ? '&#x2713;' : curr ? '&#x25CF;' : i+1;
         return `${i>0?`<div style="flex:1;height:2px;background:${done?'#22c55e33':'rgba(255,255,255,.06)'};margin-top:13px;min-width:8px"></div>`:''}
           <div style="display:flex;flex-direction:column;align-items:center;gap:4px;min-width:44px">
             <div style="width:26px;height:26px;border-radius:50%;background:${bg};border:2px solid ${bc};color:${tc};display:grid;place-items:center;font-size:11px;font-weight:700${curr?';box-shadow:0 0 10px '+sc+'66':''}">${icon}</div>
@@ -1350,25 +1578,50 @@ function renderScanResult(d){
       }).join('');
 
   const relEntry = [...(d.history||[])].reverse().find(h=>h.status==='Released');
-  const hist = [...(d.history||[])].reverse();
-  const histHtml = hist.length===0
-    ? '<p style="font-size:12px;color:rgba(255,255,255,.3)">No history recorded.</p>'
-    : hist.map(h=>{
-        const dc={Released:'#22c55e',Rejected:'#ef4444',Approved:'#16a34a',Processing:'#f59e0b','For Approval':'#3b82f6',Received:'#64748b'}[h.status]||'#64748b';
-        return `<div style="display:flex;gap:10px;margin-bottom:14px;align-items:flex-start">
-          <div style="width:10px;height:10px;border-radius:50%;background:${dc};flex-shrink:0;margin-top:3px"></div>
-          <div>
-            <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,.85)">${h.status}</div>
-            <div style="font-size:10px;color:rgba(255,255,255,.35);margin-top:2px">By ${h.by} · ${h.date}</div>
-            ${h.note?`<div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:4px;padding:6px 10px;background:rgba(255,255,255,.04);border-radius:5px;font-style:italic">"${h.note}"</div>`:''}
-          </div>
-        </div>`;
+
+  // Unified activity: merge status history + movement logs, sort by timestamp
+  const statusEntries = (d.history||[]).map(h=>({
+    entryType:'status', status:h.status, by:h.by, date:h.date,
+    note:h.note||'', location:h.location||'',
+    ts: h.timestamp ? new Date(h.timestamp).getTime() : 0
+  }));
+  const scanEntries = (movementLogs[d.id]||[]).map(m=>({
+    entryType:'scan', handledBy:m.handledBy, location:m.location,
+    date:new Date(m.timestamp).toLocaleString('en-PH'),
+    ts: new Date(m.timestamp).getTime()
+  }));
+  const unified = [...statusEntries, ...scanEntries].sort((a,b)=>b.ts-a.ts);
+
+  const unifiedHtml = unified.length===0
+    ? '<p style="font-size:12px;color:rgba(255,255,255,.3)">No activity recorded.</p>'
+    : unified.map(e=>{
+        if(e.entryType==='status'){
+          const dc={Released:'#22c55e',Rejected:'#ef4444',Approved:'#16a34a',Processing:'#f59e0b','For Approval':'#3b82f6',Received:'#64748b'}[e.status]||'#64748b';
+          return `<div style="display:flex;gap:10px;margin-bottom:14px;align-items:flex-start">
+            <div style="width:10px;height:10px;border-radius:50%;background:${dc};flex-shrink:0;margin-top:3px"></div>
+            <div>
+              <div style="font-size:10px;font-weight:700;color:rgba(249,115,22,.7);letter-spacing:.5px;text-transform:uppercase;margin-bottom:2px">Status Update</div>
+              <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,.85)">Changed to: ${e.status}</div>
+              <div style="font-size:10px;color:rgba(255,255,255,.35);margin-top:2px">By ${e.by}${e.location?' · '+e.location:''} · ${e.date}</div>
+              ${e.note?`<div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:4px;padding:6px 10px;background:rgba(255,255,255,.04);border-radius:5px;font-style:italic">"${e.note}"</div>`:''}
+            </div>
+          </div>`;
+        } else {
+          return `<div style="display:flex;gap:10px;margin-bottom:14px;align-items:flex-start">
+            <div style="width:10px;height:10px;border-radius:50%;background:#3b82f6;flex-shrink:0;margin-top:3px"></div>
+            <div>
+              <div style="font-size:10px;font-weight:700;color:rgba(96,165,250,.7);letter-spacing:.5px;text-transform:uppercase;margin-bottom:2px">QR Scan — Movement</div>
+              <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,.85)">Scanned by ${e.handledBy||'Unknown'}</div>
+              <div style="font-size:10px;color:rgba(255,255,255,.35);margin-top:2px">${e.location||'No location'} · ${e.date}</div>
+            </div>
+          </div>`;
+        }
       }).join('');
 
   document.getElementById('scan-result-body').innerHTML = `
     <div style="background:radial-gradient(ellipse at 50% 0%,#1a3d22,#0d1a10 70%);padding:22px 20px 18px;text-align:center;border-bottom:1px solid rgba(255,255,255,.06)">
       <div style="font-size:20px;font-weight:700;color:#e6edf3;margin-bottom:3px">${d.name}</div>
-      <div style="font-size:11px;color:rgba(255,255,255,.35);font-family:'DM Mono',monospace;margin-bottom:12px">${d.id} · ${d.type}</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.35);font-family:'DM Mono',monospace;margin-bottom:12px">${d.id} &middot; ${d.type}</div>
       <div style="display:inline-flex;align-items:center;gap:7px;padding:7px 16px;border-radius:99px;font-size:13px;font-weight:700;background:${sc}22;border:1px solid ${sc}55;color:${sc}">
         <span style="width:7px;height:7px;border-radius:50%;background:${sc}"></span>${d.status}
       </div>
@@ -1386,11 +1639,35 @@ function renderScanResult(d){
         </div>`).join('')}
     </div>
     <div style="padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.06)">
-      <div style="font-size:9px;font-weight:700;color:rgba(255,255,255,.25);letter-spacing:.8px;text-transform:uppercase;margin-bottom:12px">Status History</div>
-      ${histHtml}
+      <div style="font-size:9px;font-weight:700;color:rgba(255,255,255,.25);letter-spacing:.8px;text-transform:uppercase;margin-bottom:12px">Activity Log — Scans &amp; Status Updates</div>
+      ${unifiedHtml}
     </div>
+    ${d.fileData ? `
+    <div style="padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.06)">
+      <div style="font-size:9px;font-weight:700;color:rgba(74,222,128,.35);letter-spacing:.8px;text-transform:uppercase;margin-bottom:12px">Attached Document File</div>
+      ${(d.fileExt||'').toLowerCase()==='.pdf' ? `
+        <iframe src="${d.fileData}"
+          style="width:100%;height:320px;border:1px solid rgba(255,255,255,.1);border-radius:8px;margin-bottom:12px"
+          title="Document Preview"></iframe>
+      ` : ['.jpg','.jpeg','.png','.gif','.webp'].includes((d.fileExt||'').toLowerCase()) ? `
+        <div style="text-align:center">
+          <img src="${d.fileData}" alt="Document"
+            style="max-width:100%;max-height:320px;border-radius:8px;border:1px solid rgba(255,255,255,.1);margin-bottom:12px">
+        </div>
+      ` : `
+        <p style="font-size:12px;color:rgba(255,255,255,.35);padding:16px 0;text-align:center">Preview not available for this file type.</p>
+      `}
+      <div style="text-align:center">
+        <button onclick="(function(){var a=document.createElement('a');a.href='${d.fileData}';a.download='${d.name.replace(/[^a-z0-9_\-]/gi,'_')}${d.fileExt||''}';a.click();})()"
+          style="display:inline-flex;align-items:center;gap:8px;padding:9px 20px;background:#4ade80;color:#0d1117;
+            border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">
+          Download File
+        </button>
+        <p style="font-size:10px;color:rgba(255,255,255,.25);margin-top:7px">${d.name}${d.fileExt||''}</p>
+      </div>
+    </div>` : ''}
     <div style="padding:16px 18px">
-      <div style="font-size:9px;font-weight:700;color:rgba(74,222,128,.35);letter-spacing:.8px;text-transform:uppercase;margin-bottom:10px">🔐 IDEA Encryption Proof</div>
+      <div style="font-size:9px;font-weight:700;color:rgba(74,222,128,.35);letter-spacing:.8px;text-transform:uppercase;margin-bottom:10px">IDEA Encryption Proof</div>
       <div style="background:rgba(0,0,0,.3);border:1px solid rgba(74,222,128,.1);border-radius:8px;padding:12px 14px">
         ${[['Key','Group6CITKey2024'],['Algorithm','IDEA · 128-bit · 8 Rounds'],['Encrypted',d.enc.slice(0,28)+'…'],['Decrypted',IDEA.decrypt(d.enc,KEY)]].map(([l,v])=>`
           <div style="display:flex;gap:8px;margin-bottom:7px;font-size:10px;font-family:'DM Mono',monospace">
@@ -1412,21 +1689,145 @@ function openDocumentFromNotif(documentId){
   setTimeout(()=>openHistory(documentId),150);
 }
 
-/* ══ HISTORY ════════════════════════════════════════════════ */
+/* ══ MOVEMENT LOG — core helpers ═══════════════════════════ */
+function logMovement(docId, handledBy, location){
+  if(!movementLogs[docId]) movementLogs[docId]=[];
+  movementLogs[docId].push({
+    type:'scan',
+    documentId:docId,
+    handledBy:handledBy||'Unknown',
+    location:location||'',
+    action:'Scanned',
+    timestamp:new Date().toISOString()
+  });
+  save();
+}
+
+/* Called by "Log Movement" button inside the scan result modal */
+function submitMovementLog(){
+  const docId = _scanDocId;
+  if(!docId){ toast('No document selected.'); return; }
+  const handler = (document.getElementById('mvlog-handler').value||'').trim();
+  const loc = document.getElementById('mvlog-location').value;
+  if(!handler){ toast('Please enter who handled the document.'); return; }
+  if(!loc){ toast('Please select a location.'); return; }
+  logMovement(docId, handler, loc);
+  const statusEl = document.getElementById('mvlog-status');
+  if(statusEl){ statusEl.textContent = 'Movement logged at ' + new Date().toLocaleString('en-PH'); statusEl.style.display=''; }
+  toast('Movement logged.');
+}
+
+/* Called by the tracking page (real phone scan) */
+function submitTrackMovementLog(){
+  const docId = _trackDocId;
+  if(!docId) return;
+  const handler = (document.getElementById('track-mvlog-handler').value||'').trim();
+  const loc = document.getElementById('track-mvlog-location').value;
+  if(!handler){ alert('Please enter who handled the document.'); return; }
+  if(!loc){ alert('Please select a location.'); return; }
+  logMovement(docId, handler, loc);
+  document.getElementById('track-mvlog-confirm').style.display='';
+  document.getElementById('track-mvlog-form-inner').style.display='none';
+}
+
+/* ══ HISTORY — unified timeline ═════════════════════════════ */
 function openHistory(id){
   const d=docs.find(d=>d.id===id);if(!d)return;
   document.getElementById('hist-name').textContent=d.name;
   document.getElementById('hist-id').textContent=d.id;
   const tl=document.getElementById('hist-timeline');
-  if(!d.history||!d.history.length){tl.innerHTML='<p style="font-size:13px;color:var(--muted)">No history yet.</p>';}
-  else tl.innerHTML=d.history.map(h=>`
-    <div class="tl-item">
-      <div class="tl-dot ${(h.status||'').toLowerCase().replace(' ','')}"></div>
-      <div class="tl-status">${statusBadge(h.status)}</div>
-      <div class="tl-meta">By ${h.by} &nbsp;·&nbsp; ${h.date}</div>
-      ${h.note?`<div class="tl-note">"${h.note}"</div>`:''}
-    </div>`).join('');
+
+  // Merge status history + movement logs
+  const statusEntries=(d.history||[]).map(h=>({
+    entryType:'status',status:h.status,by:h.by,date:h.date,
+    note:h.note||'',location:h.location||'',
+    ts:h.timestamp?new Date(h.timestamp).getTime():0
+  }));
+  const scanEntries=(movementLogs[id]||[]).map(m=>({
+    entryType:'scan',handledBy:m.handledBy,location:m.location,
+    date:new Date(m.timestamp).toLocaleString('en-PH'),
+    ts:new Date(m.timestamp).getTime()
+  }));
+  const unified=[...statusEntries,...scanEntries].sort((a,b)=>b.ts-a.ts);
+
+  if(!unified.length){
+    tl.innerHTML='<p style="font-size:13px;color:var(--muted)">No activity yet.</p>';
+  } else {
+    tl.innerHTML=unified.map(e=>{
+      if(e.entryType==='status'){
+        const cls=(e.status||'').toLowerCase().replace(/\s+/g,'');
+        return `<div class="tl-item">
+          <div class="tl-dot ${cls}"></div>
+          <div style="display:flex;gap:6px;align-items:center;margin-bottom:2px;">
+            <span style="font-size:10px;font-weight:700;color:#f97316;letter-spacing:.4px;text-transform:uppercase">Status Update</span>
+          </div>
+          <div class="tl-status">${statusBadge(e.status)}</div>
+          <div class="tl-meta">By ${e.by}${e.location?' &nbsp;&middot;&nbsp; '+e.location:''} &nbsp;&middot;&nbsp; ${e.date}</div>
+          ${e.note?`<div class="tl-note">"${e.note}"</div>`:''}
+        </div>`;
+      } else {
+        return `<div class="tl-item">
+          <div class="tl-dot" style="background:#3b82f6;box-shadow:0 0 0 2px #dbeafe;"></div>
+          <div style="display:flex;gap:6px;align-items:center;margin-bottom:2px;">
+            <span style="font-size:10px;font-weight:700;color:#3b82f6;letter-spacing:.4px;text-transform:uppercase">QR Scan — Movement</span>
+          </div>
+          <div class="tl-status" style="color:var(--blue);font-weight:600;font-size:13px">Scanned by ${e.handledBy||'Unknown'}</div>
+          <div class="tl-meta">${e.location||'No location'} &nbsp;&middot;&nbsp; ${e.date}</div>
+        </div>`;
+      }
+    }).join('');
+  }
   openModal('history-modal');
+}
+
+/* ══ MOVEMENT LOG PAGE (Admin) ══════════════════════════════ */
+function renderMovementLog(){
+  // Build document filter options
+  const filterEl=document.getElementById('mvlog-doc-filter');
+  const docOpts=docs.map(d=>`<option value="${d.id}">${d.id} — ${d.name}</option>`).join('');
+  filterEl.innerHTML='<option value="">All Documents</option>'+docOpts;
+
+  const selDocId=filterEl.value;
+  const body=document.getElementById('mvlog-body');
+
+  // Collect all scan entries
+  let allEntries=[];
+  const targetDocs=selDocId?[selDocId]:Object.keys(movementLogs);
+  targetDocs.forEach(docId=>{
+    const docObj=docs.find(d=>d.id===docId);
+    const docName=docObj?docObj.name:docId;
+    (movementLogs[docId]||[]).forEach(m=>{
+      allEntries.push({...m,docName,ts:new Date(m.timestamp).getTime()});
+    });
+  });
+  allEntries.sort((a,b)=>b.ts-a.ts);
+
+  if(!allEntries.length){
+    body.innerHTML='<p style="font-size:13px;color:var(--muted)">No movement entries yet. Movement is logged when a QR code is scanned.</p>';
+    return;
+  }
+
+  body.innerHTML=`
+    <table>
+      <thead><tr>
+        <th>Timestamp</th><th>Document</th><th>Handled By</th><th>Location</th><th>Action</th>
+      </tr></thead>
+      <tbody>
+        ${allEntries.map(e=>`<tr>
+          <td style="font-size:11px;color:var(--muted);font-family:var(--mono);white-space:nowrap">${new Date(e.timestamp).toLocaleString('en-PH')}</td>
+          <td><span class="doc-name-cell">${e.docName}</span><br><span class="doc-id-cell">${e.documentId}</span></td>
+          <td style="font-weight:600;font-size:13px">${e.handledBy||'—'}</td>
+          <td style="font-size:13px;color:var(--muted)">${e.location||'—'}</td>
+          <td><span class="badge" style="background:#eff6ff;color:#1d4ed8">${e.action||'Scanned'}</span></td>
+        </tr>`).join('')}
+      </tbody>
+    </table>`;
+}
+
+function clearMovementLog(){
+  if(!confirm('Clear ALL movement logs? This cannot be undone.'))return;
+  movementLogs={};
+  save();renderMovementLog();toast('Movement logs cleared.');
 }
 
 /* ══ NOTIFICATIONS — FIX: includes documentId ══════════════ */
@@ -1516,6 +1917,8 @@ function runDemo(){
 }
 
 /* ══ TRACKING PAGE (Public) ════════════════════════════════ */
+let _trackDocId = '';
+
 function initTrackingPage(){
   const params = new URLSearchParams(window.location.search);
   const encParam = params.get('track');
@@ -1533,7 +1936,7 @@ function initTrackingPage(){
 
     if(!d){
       document.getElementById('track-content-hero').innerHTML=`
-        <div class="track-doc-badge" style="background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.3)">⚠️</div>
+        <div class="track-doc-badge" style="background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.3)">!</div>
         <div class="track-doc-name">Document Not Found</div>
         <div class="track-doc-meta">The QR code may be outdated or from a different system</div>`;
       document.getElementById('track-content-body').innerHTML=`
@@ -1553,7 +1956,7 @@ function initTrackingPage(){
 
     // ── Hero ──
     document.getElementById('track-content-hero').innerHTML=`
-      <div class="track-doc-badge" style="background:rgba(74,222,128,.08);border-color:rgba(74,222,128,.25)">📄</div>
+      <div class="track-doc-badge" style="background:rgba(74,222,128,.08);border-color:rgba(74,222,128,.25)"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(74,222,128,.8)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
       <div class="track-doc-name">${d.name}</div>
       <div class="track-doc-meta">${d.id} &nbsp;·&nbsp; ${d.type} &nbsp;·&nbsp; ${office}</div>
       <div class="track-status-pill" style="background:${sColor}22;border:1px solid ${sColor}55;color:${sColor}">
@@ -1564,7 +1967,7 @@ function initTrackingPage(){
     // ── Workflow ──
     const wfHtml = isRejected
       ? `<div style="text-align:center;width:100%;padding:8px 0">
-           <span style="font-size:13px;color:#f87171;font-weight:600">⛔ Document was Rejected</span>
+           <span style="font-size:13px;color:#f87171;font-weight:600">Document was Rejected</span>
            <p style="font-size:12px;color:rgba(255,255,255,.3);margin-top:4px">Check the history below for details.</p>
          </div>`
       : workflow.map((step, i) => {
@@ -1573,40 +1976,104 @@ function initTrackingPage(){
           const cls  = done?'done':curr?'current':'';
           return `${i>0?'<div class="twf-arrow">›</div>':''}
             <div class="twf-step">
-              <div class="twf-dot ${cls}">${done?'✓':i+1}</div>
+              <div class="twf-dot ${cls}">${done?'&#x2713;':i+1}</div>
               <div class="twf-label ${cls}">${step}</div>
             </div>`;
-        }).join('');
-
-    // ── History timeline ──
-    const hist = (d.history||[]);
-    const histHtml = hist.length === 0
-      ? '<p style="font-size:13px;color:rgba(255,255,255,.3)">No history recorded.</p>'
-      : [...hist].reverse().map(h => {
-          const dotCls = (h.status||'').toLowerCase().replace(/\s+/g,'');
-          return `<div class="ttl-item">
-            <div class="ttl-dot ${dotCls}"></div>
-            <div class="ttl-status-label">${h.status}</div>
-            <div class="ttl-meta">Updated by ${h.by} &nbsp;·&nbsp; ${h.date}</div>
-            ${h.note?`<div class="ttl-note">"${h.note}"</div>`:''}
-          </div>`;
         }).join('');
 
     // ── Release date ──
     const relEntry = [...(d.history||[])].reverse().find(h=>h.status==='Released');
     const releaseDate = relEntry ? relEntry.date : '—';
 
+    _trackDocId = docId;
+
+    // ── Unified activity timeline for tracking page ──
+    const statusEntries2=(d.history||[]).map(h=>({
+      entryType:'status',status:h.status,by:h.by,date:h.date,
+      note:h.note||'',location:h.location||'',
+      ts:h.timestamp?new Date(h.timestamp).getTime():0
+    }));
+    const scanEntries2=(movementLogs[docId]||[]).map(m=>({
+      entryType:'scan',handledBy:m.handledBy,location:m.location,
+      date:new Date(m.timestamp).toLocaleString('en-PH'),
+      ts:new Date(m.timestamp).getTime()
+    }));
+    const unified2=[...statusEntries2,...scanEntries2].sort((a,b)=>b.ts-a.ts);
+    const unifiedHtml2=unified2.length===0
+      ? '<p style="font-size:13px;color:rgba(255,255,255,.3)">No activity recorded.</p>'
+      : unified2.map(e=>{
+          if(e.entryType==='status'){
+            const dotCls=(e.status||'').toLowerCase().replace(/\s+/g,'');
+            return `<div class="ttl-item">
+              <div class="ttl-dot ${dotCls}"></div>
+              <div style="font-size:10px;font-weight:700;color:rgba(249,115,22,.6);letter-spacing:.4px;text-transform:uppercase;margin-bottom:2px">Status Update — Admin</div>
+              <div class="ttl-status-label">${e.status}</div>
+              <div class="ttl-meta">By ${e.by}${e.location?' &middot; '+e.location:''} &middot; ${e.date}</div>
+              ${e.note?`<div class="ttl-note">"${e.note}"</div>`:''}
+            </div>`;
+          } else {
+            return `<div class="ttl-item">
+              <div class="ttl-dot" style="background:#3b82f6;border-color:rgba(59,130,246,.5);"></div>
+              <div style="font-size:10px;font-weight:700;color:rgba(96,165,250,.6);letter-spacing:.4px;text-transform:uppercase;margin-bottom:2px">QR Scan — Movement</div>
+              <div class="ttl-status-label" style="color:#93c5fd">Scanned by ${e.handledBy||'Unknown'}</div>
+              <div class="ttl-meta">${e.location||'No location'} &middot; ${e.date}</div>
+            </div>`;
+          }
+        }).join('');
+
     // ── Body ──
     document.getElementById('track-content-body').innerHTML=`
+      <!-- Movement Log Form -->
+      <div class="track-card">
+        <div class="track-card-head"><h3>Log Movement</h3></div>
+        <div class="track-card-body">
+          <p style="font-size:12px;color:rgba(255,255,255,.4);margin-bottom:14px;line-height:1.6">
+            Scanning this QR code logs document movement. It does <strong style="color:rgba(255,255,255,.7)">not</strong> change the document status — only Admin can update status.
+          </p>
+          <div id="track-mvlog-form-inner">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+              <div>
+                <label style="font-size:10px;font-weight:700;color:rgba(255,255,255,.3);letter-spacing:.5px;text-transform:uppercase;display:block;margin-bottom:6px">Handled By</label>
+                <input type="text" id="track-mvlog-handler" placeholder="Your name"
+                  style="width:100%;padding:9px 12px;border:1px solid rgba(255,255,255,.12);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:#e6edf3;background:#161b22;outline:none;">
+              </div>
+              <div>
+                <label style="font-size:10px;font-weight:700;color:rgba(255,255,255,.3);letter-spacing:.5px;text-transform:uppercase;display:block;margin-bottom:6px">Location</label>
+                <select id="track-mvlog-location"
+                  style="width:100%;padding:9px 12px;border:1px solid rgba(255,255,255,.12);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:#e6edf3;background:#161b22;outline:none;">
+                  <option value="">Select location…</option>
+                  <option>Registrar's Office</option>
+                  <option>Administrative Office</option>
+                  <option>Accounting Office</option>
+                  <option>Laboratory Office</option>
+                  <option>Manager's Office</option>
+                  <option>Document Control Office</option>
+                  <option>Dean's Office</option>
+                  <option>Other</option>
+                </select>
+              </div>
+            </div>
+            <button onclick="submitTrackMovementLog()"
+              style="width:100%;padding:10px;background:rgba(74,222,128,.15);border:1px solid rgba(74,222,128,.3);border-radius:8px;color:#4ade80;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;">
+              Submit Movement Log
+            </button>
+          </div>
+          <div id="track-mvlog-confirm" style="display:none;text-align:center;padding:16px 0;">
+            <div style="font-size:14px;font-weight:600;color:#4ade80;margin-bottom:4px">Movement Logged</div>
+            <div style="font-size:12px;color:rgba(255,255,255,.4)">This scan has been recorded in the movement log.</div>
+          </div>
+        </div>
+      </div>
+
       <!-- Workflow -->
       <div class="track-card">
-        <div class="track-card-head"><h3>📋 &nbsp;Document Workflow</h3></div>
+        <div class="track-card-head"><h3>Document Workflow</h3></div>
         <div class="track-workflow">${wfHtml}</div>
       </div>
 
       <!-- Document Info -->
       <div class="track-card">
-        <div class="track-card-head"><h3>📄 &nbsp;Document Information</h3></div>
+        <div class="track-card-head"><h3>Document Information</h3></div>
         <div class="track-card-body">
           <div class="track-field"><span class="track-field-label">Document</span><span class="track-field-value" style="font-weight:700">${d.name}</span></div>
           <div class="track-field"><span class="track-field-label">Type</span><span class="track-field-value">${d.type}</span></div>
@@ -1624,32 +2091,68 @@ function initTrackingPage(){
         </div>
       </div>
 
-      <!-- History -->
+      <!-- Unified Activity Log -->
       <div class="track-card">
-        <div class="track-card-head"><h3>🕐 &nbsp;Status History</h3></div>
-        <div class="track-card-body"><div class="track-timeline">${histHtml}</div></div>
+        <div class="track-card-head"><h3>Activity Log</h3></div>
+        <div class="track-card-body">
+          <p style="font-size:11px;color:rgba(255,255,255,.3);margin-bottom:16px;">Scan movements (blue) and admin status updates (orange) — chronological.</p>
+          <div class="track-timeline">${unifiedHtml2}</div>
+        </div>
       </div>
+
+      <!-- Attached File -->
+      ${d.fileData ? `
+      <div class="track-card">
+        <div class="track-card-head"><h3>Attached File</h3></div>
+        <div class="track-card-body" style="text-align:center">
+          ${(d.fileExt||'').toLowerCase()==='.pdf' ? `
+            <iframe src="${d.fileData}"
+              style="width:100%;height:400px;border:1px solid rgba(255,255,255,.1);border-radius:8px;margin-bottom:14px"
+              title="Document Preview"></iframe>
+          ` : ['.jpg','.jpeg','.png','.gif','.webp'].includes((d.fileExt||'').toLowerCase()) ? `
+            <img src="${d.fileData}" alt="Document preview"
+              style="max-width:100%;max-height:400px;border-radius:8px;border:1px solid rgba(255,255,255,.1);margin-bottom:14px">
+          ` : `<p style="font-size:13px;color:rgba(255,255,255,.4);padding:20px 0">Preview not available for this file type.</p>`}
+          <button onclick="(function(){
+            var a=document.createElement('a');
+            a.href='${d.fileData}';
+            a.download='${d.name.replace(/[^a-z0-9_\-]/gi,'_')}${d.fileExt||''}';
+            a.click();
+          })()" style="display:inline-flex;align-items:center;gap:8px;padding:10px 22px;
+            background:#4ade80;color:#0d1117;border:none;border-radius:8px;
+            font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">
+            Download File
+          </button>
+          <p style="font-size:11px;color:rgba(255,255,255,.3);margin-top:10px">${d.name}${d.fileExt||''}</p>
+        </div>
+      </div>` : `
+      <div class="track-card">
+        <div class="track-card-head"><h3>Attached File</h3></div>
+        <div class="track-card-body" style="text-align:center;padding:28px">
+          <p style="font-size:13px;color:rgba(255,255,255,.3)">No digital file attached to this document.</p>
+        </div>
+      </div>`}
 
       <!-- IDEA Encryption Proof -->
       <div class="track-card">
-        <div class="track-card-head"><h3>🔐 &nbsp;IDEA Encryption Verification</h3></div>
+        <div class="track-card-head"><h3>IDEA Encryption Verification</h3></div>
         <div class="track-card-body">
           <p style="font-size:12px;color:rgba(255,255,255,.4);margin-bottom:14px;line-height:1.6">
-            This QR code's payload is encrypted using the IDEA (International Data Encryption Algorithm) with a 128-bit key.
-            The document name is stored as IDEA ciphertext. When scanned, the system decrypts the document ID from the URL parameter to retrieve this record.
+            This QR code's payload is encrypted using IDEA (International Data Encryption Algorithm) with a 128-bit key.
+            The document ID is stored as IDEA ciphertext in the QR URL parameter.
           </p>
           <div class="track-enc-box">
             <div class="track-enc-row"><span class="track-enc-label">Doc ID</span><span class="track-enc-val">${d.id}</span></div>
             <div class="track-enc-row"><span class="track-enc-label">Encrypted</span><span class="track-enc-val">${d.enc}</span></div>
             <div class="track-enc-row"><span class="track-enc-label">Decrypted</span><span class="track-enc-val" style="color:#4ade80">${IDEA.decrypt(d.enc,KEY)}</span></div>
-            <div class="track-enc-row"><span class="track-enc-label">URL Token</span><span class="track-enc-val">${encParam.slice(0,32)}…</span></div>
+            <div class="track-enc-row"><span class="track-enc-label">URL Token</span><span class="track-enc-val">${encParam.slice(0,32)}&hellip;</span></div>
           </div>
         </div>
       </div>`;
 
   } catch(e) {
     document.getElementById('track-content-hero').innerHTML=`
-      <div class="track-doc-badge" style="background:rgba(239,68,68,.12)">⚠️</div>
+      <div class="track-doc-badge" style="background:rgba(239,68,68,.12)">!</div>
       <div class="track-doc-name">Invalid QR Code</div>
       <div class="track-doc-meta">Could not decrypt the QR payload</div>`;
     document.getElementById('track-content-body').innerHTML=`
@@ -1671,6 +2174,41 @@ function initTrackingPage(){
 function openModal(id){document.getElementById(id).classList.add('open');}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
 document.querySelectorAll('.overlay').forEach(el=>el.addEventListener('click',e=>{if(e.target===el)el.classList.remove('open');}));
+
+/* ══ FILE VIEW & DOWNLOAD ═══════════════════════════════════ */
+let _fileModalDocId = null;
+
+function openFileModal(id){
+  const d = docs.find(d => d.id === id);
+  if(!d || !d.fileData){ toast('No file attached to this document.'); return; }
+  _fileModalDocId = id;
+  document.getElementById('file-modal-docname').textContent = d.name + (d.fileExt || '');
+  document.getElementById('file-modal-pdf').style.display      = 'none';
+  document.getElementById('file-modal-img').style.display      = 'none';
+  document.getElementById('file-modal-fallback').style.display = 'none';
+  const ext = (d.fileExt || '').toLowerCase();
+  if(ext === '.pdf'){
+    document.getElementById('file-modal-iframe').src = d.fileData;
+    document.getElementById('file-modal-pdf').style.display = 'block';
+  } else if(['.jpg','.jpeg','.png','.gif','.webp'].includes(ext)){
+    document.getElementById('file-modal-image').src = d.fileData;
+    document.getElementById('file-modal-img').style.display = 'block';
+  } else {
+    document.getElementById('file-modal-fallback').style.display = 'block';
+  }
+  openModal('file-modal');
+}
+
+function triggerDownload(){
+  if(!_fileModalDocId) return;
+  const d = docs.find(d => d.id === _fileModalDocId);
+  if(!d || !d.fileData){ toast('File not found.'); return; }
+  const a    = document.createElement('a');
+  a.href     = d.fileData;
+  a.download = d.name.replace(/[^a-z0-9_\-]/gi, '_') + (d.fileExt || '');
+  a.click();
+  toast('Download started!');
+}
 
 /* ══ TOAST ══════════════════════════════════════════════════ */
 let toastTimer;
